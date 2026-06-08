@@ -27,8 +27,11 @@ public static class InfrastructureServiceExtensions
         var connectionString = configuration.GetConnectionString("Redis")
             ?? "localhost:6379";
 
+        var config = ConfigurationOptions.Parse(connectionString);
+        config.AbortOnConnectFail = false;
+
         services.AddSingleton<IConnectionMultiplexer>(
-            ConnectionMultiplexer.Connect(connectionString));
+            ConnectionMultiplexer.Connect(config));
 
         return services;
     }
