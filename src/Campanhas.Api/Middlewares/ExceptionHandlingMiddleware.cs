@@ -1,4 +1,4 @@
-﻿using Campanhas.Domain.Enums;
+using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Resources;
@@ -29,40 +29,36 @@ public class ExceptionHandlingMiddleware
         catch (DomainException ex)
         {
             _logger.LogError(message: $"Erro de negócio detectado: " + ex.ErrorCode + " - " + ex.Message, BaseLogType.LOG,
-                            data: ex, 
+                            data: ex,
                             correlationId: correlationId
                             );
 
-            // 1. Extrai o status code (ex: 422, 400, 403) baseado no início do ErrorCode
             var statusCode = ExtrairStatusCode(ex.ErrorCode, HttpStatusCode.UnprocessableEntity);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            // 2. Monta o objeto elaborado idêntico ao padrão RFC (ValidationProblemDetails)
             var respostaElaborada = new
             {
-                title = "A domain error occurred.", 
+                title = "A domain error occurred.",
                 status = (int)statusCode,
                 errors = new Dictionary<string, string[]>
-        {
-            // Agrupa o erro na chave "Domain" para manter a estrutura de array/dicionário
-            { "Domain", new[] { ex.Message } }
-        },
+                {
+                    { "Domain", new[] { ex.Message } }
+                },
                 traceId = correlationId,
-                code = ex.ErrorCode 
+                code = ex.ErrorCode
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(respostaElaborada));
         }
-        catch (BadHttpRequestException ex) // Captura falhas de validação de modelo/Data Annotations
+        catch (BadHttpRequestException ex)
         {
             _logger.LogWarning(message: $"Falha na validação dos dados de entrada: " + ex.Message, BaseLogType.LOG,
                                 data: ex,
                                 correlationId: correlationId
                                 );
 
-            // Tenta buscar uma chave do resource (ex: "400_NAME_REQUIRED")
             string errorCode = ex.Message;
             string mensagemTraduzida = ErrorMessages.GetString(errorCode);
 
@@ -99,7 +95,6 @@ public class ExceptionHandlingMiddleware
         await context.Response.WriteAsync(JsonSerializer.Serialize(resposta));
     }
 
-    // Método que lê o "400_" ou "422_" do início da string e converte no Enum do .NET
     private static HttpStatusCode ExtrairStatusCode(string? errorCode, HttpStatusCode fallback)
     {
         if (!string.IsNullOrWhiteSpace(errorCode) && errorCode.Length >= 4)

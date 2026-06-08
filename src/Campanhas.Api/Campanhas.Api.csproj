@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Campanhas.Application\Campanhas.Application.csproj" />
     <ProjectReference Include="..\Campanhas.Domain\Campanhas.Domain.csproj" />
     <ProjectReference Include="..\Campanhas.Infrastructure\Campanhas.Infrastructure.csproj" />

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Primitives;
 using Campanhas.Domain.Shared.Interfaces;
 
 namespace Campanhas.Api.Middlewares
@@ -43,7 +43,6 @@ namespace Campanhas.Api.Middlewares
        });
     }
 
-    // Extension method used to add the middleware to the HTTP request pipeline.
     public static class CorrelationMiddlewareExtensions
     {
         public static IApplicationBuilder UseCorrelationMiddleware(this IApplicationBuilder builder)

@@ -1,9 +1,9 @@
-﻿using Campanhas.Domain.Shared.Entity;
+using Campanhas.Domain.Shared.Entity;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Usuarios.Infrastructure.Repositories
+namespace Campanhas.Infrastructure.Repositories
 {
     public class EFRepository<T> : IRepository<T> where T : EntityBase
     {
@@ -23,7 +23,6 @@ namespace Usuarios.Infrastructure.Repositories
             _context.Entry(entidade).State = EntityState.Modified;
             try
             {
-                // Executa a persistência de forma assíncrona 🚀
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
@@ -37,7 +36,6 @@ namespace Usuarios.Infrastructure.Repositories
         {
             entidade.DataCriacao = DateTime.UtcNow;
 
-            // O EF possui o AddAsync para preparar a árvore de entidades assincronamente se necessário
             await _dbSet.AddAsync(entidade, cancellationToken);
             try
             {
@@ -52,7 +50,6 @@ namespace Usuarios.Infrastructure.Repositories
 
         public async Task RemoverAsync(Guid guid, CancellationToken cancellationToken = default)
         {
-            // Busca a entidade usando o método assíncrono antes de deletar
             var entidade = await ObterPorGuidAsync(guid, cancellationToken);
 
             if (entidade != null)
@@ -72,13 +69,11 @@ namespace Usuarios.Infrastructure.Repositories
 
         public async Task<T?> ObterPorGuidAsync(Guid guid, CancellationToken cancellationToken = default)
         {
-            // Evita travar a thread esperando a resposta de busca do banco
             return await _dbSet.FirstOrDefaultAsync(e => e.Guid == guid, cancellationToken);
         }
 
         public async Task<IList<T>> ObterTodosAsync(CancellationToken cancellationToken = default)
         {
-            // Carrega a lista inteira do banco de forma assíncrona
             return await _dbSet.ToListAsync(cancellationToken);
         }
     }
