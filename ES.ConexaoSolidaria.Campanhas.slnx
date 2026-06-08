@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/docs/" />
+  <Folder Name="/src/">
+    <Project Path="src/Campanhas.Api/Campanhas.Api.csproj" />
+    <Project Path="src/Campanhas.Application/Campanhas.Application.csproj" Id="04e08ffe-7fcf-448e-88d0-62cb3fa9835e" />
+    <Project Path="src/Campanhas.Domain/Campanhas.Domain.csproj" Id="474e8716-42d7-488a-8fbd-367a5b90cbca" />
+    <Project Path="src/Campanhas.Infrastructure/Campanhas.Infrastructure.csproj" Id="dec64a20-c3cc-4ebf-b933-d9133878488c" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>
