@@ -1,6 +1,6 @@
-﻿using Campanhas.Domain.Entities.Usuarios.DTO;
+﻿using Campanhas.Domain.Shared.Primitives;
 
 public interface IUserContext
 {
-    UsuarioDTO? GetUser();
+    SystemUser? GetUser();
 }

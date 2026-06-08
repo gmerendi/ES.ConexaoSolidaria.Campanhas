@@ -1,6 +1,5 @@
-﻿using Campanhas.Domain.Entities.Usuarios;
-using Campanhas.Domain.Entities.Usuarios.DTO;
-using Campanhas.Domain.Enums;
+﻿using Campanhas.Domain.Enums;
+using Campanhas.Domain.Shared.Primitives;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -15,7 +14,7 @@ namespace Campanhas.Infrastructure.Services.UserContext
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public UsuarioDTO? GetUser()
+        public SystemUser? GetUser()
         {
             var user = _httpContextAccessor.HttpContext?.User;
 
@@ -49,7 +48,7 @@ namespace Campanhas.Infrastructure.Services.UserContext
             }
 
             // 4. Retorna o DTO 
-            return new UsuarioDTO(
+            return new SystemUser(
                 userGuid,
                 nomeCompleto,
                 cpf,

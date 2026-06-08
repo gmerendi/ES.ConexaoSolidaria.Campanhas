@@ -1,4 +1,4 @@
-﻿namespace Campanhas.Domain.Entities.Usuarios
+﻿namespace Campanhas.Domain.Enums
 {
     public enum Perfil
     {
