@@ -69,7 +69,7 @@ namespace Campanhas.Infrastructure.Repositories
 
         public async Task<T?> ObterPorGuidAsync(Guid guid, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => e.Guid == guid, cancellationToken);
+            return await _dbSet.FirstOrDefaultAsync(e => e.Id == guid, cancellationToken);
         }
 
         public async Task<IList<T>> ObterTodosAsync(CancellationToken cancellationToken = default)

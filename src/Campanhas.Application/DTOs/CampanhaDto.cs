@@ -11,5 +11,5 @@ public record CampanhaDto(
     string StatusCampanha,
     string StatusEntidade,
     DateTime DataCriacao,
-    DateTime DataModificacao
+    DateTime? DataModificacao
 );

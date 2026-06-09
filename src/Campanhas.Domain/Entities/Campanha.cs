@@ -1,6 +1,7 @@
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Events;
 using Campanhas.Domain.Exceptions;
+using Campanhas.Domain.Shared.Entity;
 using Campanhas.Domain.ValueObjects;
 
 namespace Campanhas.Domain.Entities;

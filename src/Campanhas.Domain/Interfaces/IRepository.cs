@@ -1,3 +1,5 @@
+using Campanhas.Domain.Shared.Entity;
+
 namespace Campanhas.Domain.Interfaces;
 
 public interface IRepository<T> where T : EntityBase
