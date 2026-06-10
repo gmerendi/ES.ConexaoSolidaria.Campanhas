@@ -24,6 +24,13 @@ namespace Campanhas.Infrastructure.Extensions
                 options.AddInterceptors(sp.GetRequiredService<AuditInterceptor>());
             }, ServiceLifetime.Scoped);
 
+            // DbContext de Campanhas
+            services.AddDbContext<CampanhaDbContext>((sp, options) =>
+            {
+                options.UseNpgsql(connectionString,
+                    npgsql => npgsql.MigrationsAssembly("Campanhas.Infrastructure"));
+            }, ServiceLifetime.Scoped);
+
             logger.LogInformation(" ***** DbContext service inicializado.");
 
             return services;

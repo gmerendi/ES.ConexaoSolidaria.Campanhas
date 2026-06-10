@@ -8,7 +8,7 @@ var logCounter = 0;
 var logTotal = 10;
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ── Configuration 
+// ── Configuration
 // ──────────────────────────────────────────────────────────────────────────────
 ConfigureAppSettings(builder.Configuration);
 
@@ -21,7 +21,7 @@ using var loggerFactory = LoggerFactory.Create(logging => {
     logging.AddSimpleConsole();
 });
 var logger = loggerFactory.CreateLogger("Program");
-logger.LogInformation(" ***** ({0}/{1}) - Inicializando Users API ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicializando Campanhas API ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -38,24 +38,23 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Endpoints "
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
 builder.Services.AddSwaggerConfiguration(logger);
-builder.Services.AddHealthCheckConfiguration(logger);
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ── Appplication Extensions
+// ── Application Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
-//builder.Services.AddUseCaseServices(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Application Extensions ", logCounter++, logTotal);
+builder.Services.AddUseCaseServices();
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Application Extensions ", logCounter, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Domain Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Domain Extensions ", logCounter++, logTotal);
 //builder.Services.AddDomainServices(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Domain Extensions ", logCounter, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -69,33 +68,28 @@ builder.Services.AddAuditLog(builder.Configuration, logger);
 builder.Services.AddMessaging(builder.Configuration, logger);
 builder.Services.AddAuthenticationServices(builder.Configuration, logger);
 builder.Services.AddCacheService(builder.Configuration, logger);
+builder.Services.AddHealthCheckServices();
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter, logTotal);
 
 
-// ──────────────────────────────────────────────────────────────────────────────
-// ── Health Check Service
-// ──────────────────────────────────────────────────────────────────────────────
-
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-
-app.MapControllers();
-
-
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ── Middlewares
+// ── Middlewares  (ANTES do MapControllers — ordem correta)
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Middlewares ", logCounter++, logTotal);
 app.UseSwaggerMiddleware(logger);
-app.UseCorrelationMiddleware();
 app.UseExceptionMiddleware();
+app.UseCorrelationMiddleware();
 app.UseTokenBlacklistMiddleware();
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Middlewares ", logCounter, logTotal);
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -107,10 +101,9 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Migrations 
 
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ── Health Check MAppings
+// ── Health Check Mappings
 // ──────────────────────────────────────────────────────────────────────────────
-app.MapCustomHealthChecks();
-
+app.MapHealthCheckEndpoints();
 
 
 app.Run();
@@ -123,7 +116,7 @@ void ConfigureAppSettings(ConfigurationManager config)
 {
     string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
                        ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
-                       ?? "Production"; // Define um default se não encontrar
+                       ?? "Production";
 
     config.SetBasePath(Directory.GetCurrentDirectory())
           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
