@@ -14,7 +14,7 @@ public static class InfrastructureServiceExtensions
     {
         services.AddDbContext<CampanhaDbContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"),
+                configuration.GetConnectionString("Database"),
                 npgsql => npgsql.MigrationsAssembly("Campanhas.Infrastructure")));
 
         return services;

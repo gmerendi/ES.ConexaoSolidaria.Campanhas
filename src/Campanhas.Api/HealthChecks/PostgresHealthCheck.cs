@@ -9,8 +9,8 @@ public sealed class PostgresHealthCheck : IHealthCheck
 
     public PostgresHealthCheck(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("ConnectionString 'DefaultConnection' não configurada.");
+        _connectionString = configuration.GetConnectionString("Database")
+            ?? throw new InvalidOperationException("ConnectionString 'Database' não configurada.");
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(

@@ -38,7 +38,6 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Endpoints "
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
 builder.Services.AddSwaggerConfiguration(logger);
-builder.Services.AddHealthCheckServices();
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
 
 
@@ -63,14 +62,13 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Domain Exte
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Infrastructure Extensions ", logCounter++, logTotal);
 builder.Services.AddDbContext(builder.Configuration, logger);
-builder.Services.AddDatabaseServices(builder.Configuration);
 builder.Services.AddCustomLogging(logger);
 builder.Services.AddRepositories(logger);
-builder.Services.AddRepositories();
 builder.Services.AddAuditLog(builder.Configuration, logger);
 builder.Services.AddMessaging(builder.Configuration, logger);
 builder.Services.AddAuthenticationServices(builder.Configuration, logger);
 builder.Services.AddCacheService(builder.Configuration, logger);
+builder.Services.AddHealthCheckServices();
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter, logTotal);
 
 

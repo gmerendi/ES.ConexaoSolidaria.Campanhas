@@ -18,8 +18,11 @@ public static class HealthCheckServiceExtensions
 
     public static IEndpointRouteBuilder MapHealthCheckEndpoints(this IEndpointRouteBuilder app)
     {
+        // Predicate filtra apenas checks com tag "infra", excluindo os registros
+        // automáticos do MassTransit (que não possuem essa tag e dependem do bus estar conectado)
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
+            Predicate = check => check.Tags.Contains("infra"),
             ResponseWriter = WriteJsonResponse
         });
 

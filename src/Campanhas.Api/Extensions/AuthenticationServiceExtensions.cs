@@ -10,7 +10,7 @@ public static class AuthenticationServiceExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var key = configuration["Jwt:Key"]
+        var key = configuration["Jwt:SecretKey"]
             ?? throw new InvalidOperationException("Chave JWT não configurada.");
 
         services
