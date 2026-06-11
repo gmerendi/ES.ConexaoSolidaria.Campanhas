@@ -61,6 +61,33 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nao existe campanha com o Guid especificado.
+        /// </summary>
+        public static string _400_CAMPAIGN_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("400_CAMPAIGN_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nao existe nenhuma campanha ativa no momento.
+        /// </summary>
+        public static string _400_CAMPAIGN_NONE_ACTIVE {
+            get {
+                return ResourceManager.GetString("400_CAMPAIGN_NONE_ACTIVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campanha nao encontrada.
+        /// </summary>
+        public static string _400_CAMPAIGN_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("400_CAMPAIGN_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O Comando não deve ser nulo.
         /// </summary>
         public static string _400_COMMAND_INVALID {
@@ -214,6 +241,15 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo termo é obrigatorio.
+        /// </summary>
+        public static string _400_TERM_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_TERM_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo Titulo deve possuir entre 5 e 200 caracteres.
         /// </summary>
         public static string _400_TITLE_LENGTH_INVALID {
@@ -250,6 +286,15 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo Valor é obrigatório.
+        /// </summary>
+        public static string _400_VALUE_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_VALUE_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Senha inválida.
         /// </summary>
         public static string _401_INVALID_CREDENTIALS {
@@ -273,6 +318,15 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _403_CAMPAIGN_CAN_BE_CHANGED_BY_MANAGER {
             get {
                 return ResourceManager.GetString("403_CAMPAIGN_CAN_BE_CHANGED_BY_MANAGER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Essa campanha nao esta mais aceitando doacoes.
+        /// </summary>
+        public static string _403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION {
+            get {
+                return ResourceManager.GetString("403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION", resourceCulture);
             }
         }
         
@@ -399,6 +453,15 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _422_CAMPAIGN_FINISHED_CANNOT_CANCEL {
             get {
                 return ResourceManager.GetString("422_CAMPAIGN_FINISHED_CANNOT_CANCEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A campanha não esta ativa.
+        /// </summary>
+        public static string _422_CAMPAIGN_NOT_ACTIVE {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_NOT_ACTIVE", resourceCulture);
             }
         }
         
@@ -534,6 +597,15 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _422_USER_SUSPENDED {
             get {
                 return ResourceManager.GetString("422_USER_SUSPENDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O Valor deve ser maior que 0..
+        /// </summary>
+        public static string _422_VALUE_MUST_BE_GREATER_THAN_ZERO {
+            get {
+                return ResourceManager.GetString("422_VALUE_MUST_BE_GREATER_THAN_ZERO", resourceCulture);
             }
         }
     }

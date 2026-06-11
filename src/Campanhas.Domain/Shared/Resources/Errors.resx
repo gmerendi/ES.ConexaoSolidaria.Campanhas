@@ -288,4 +288,16 @@
   <data name="422_CAMPAIGN_NOT_ACTIVE" xml:space="preserve">
     <value>A campanha não esta ativa</value>
   </data>
+  <data name="400_TERM_REQUIRED" xml:space="preserve">
+    <value>O campo termo é obrigatorio</value>
+  </data>
+  <data name="400_VALUE_REQUIRED" xml:space="preserve">
+    <value>O campo Valor é obrigatório</value>
+  </data>
+  <data name="422_VALUE_MUST_BE_GREATER_THAN_ZERO" xml:space="preserve">
+    <value>O Valor deve ser maior que 0.</value>
+  </data>
+  <data name="403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION" xml:space="preserve">
+    <value>Essa campanha nao esta mais aceitando doacoes</value>
+  </data>
 </root>

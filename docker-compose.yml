@@ -5,6 +5,7 @@ volumes:
   campanhas_data: {}
   rabbitmq_data: {}
   rabbitmq_logs: {}
+  elasticsearch_data: {}
 
 
 
@@ -62,6 +63,21 @@ services:
       - "6379:6379"
 
   ###########################################################################
+  # ELASTICSEARCH
+  ###########################################################################
+  cs.elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: cs-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    networks:
+      - csnetwork
+
+  ###########################################################################
   # CAMPANHAS-DB
   ###########################################################################
   cs.campanhas.db:
@@ -112,6 +128,7 @@ services:
       ConnectionStrings__ConnectionString: "Host=cs-campanhas-db;Port=5432;Database=cs-campanhas;Username=fiap;Password=fiap123"
       ConnectionStrings__AuditLog: "http://cs-dynamo-db:8000"
       ConnectionStrings__Redis: "cs-redis:6379"
+      ConnectionStrings__ElasticSearch: "http://cs-elasticsearch:9200"
 
       #RabbitMq
       RabbitMq__Host: "cs-rabbitmq"

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.19" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.3" />
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.11.0" />
 	<PackageReference Include="MassTransit" Version="8.0.0" />
 	<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
@@ -39,10 +40,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Campanhas.Application\Campanhas.Application.csproj" />
     <ProjectReference Include="..\Campanhas.Domain\Campanhas.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

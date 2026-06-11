@@ -15,10 +15,11 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
     private readonly IMessageService _messageService;
     private readonly ICacheService _cacheService;
     private readonly IMetricsService _metrics;
+    private readonly IElasticSearchService _elasticSearchService;
 
     public CriarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
         IBaseLogger<CriarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics)
+        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
@@ -26,7 +27,7 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
         _messageService = messageService;
         _cacheService = cacheService;
         _metrics = metrics;
-
+        _elasticSearchService = elasticSearchService;
     }
 
     public async Task<Result<CriarCampanhaResponse>> HandleAsync(CriarCampanhaCommand command, CancellationToken ct = default)
@@ -78,9 +79,10 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
             await _cacheService.SetAsync(cacheKey, campanhaDTO, TimeSpan.FromMinutes(30));
             await _cacheService.RemoveByPrefixAsync("campanhas:ativas");
 
+            // 7 - Insere no elasticsearch
+            await _elasticSearchService.IndexAsync(campanhaDTO);
 
-
-            // 7 - Enviar mensagem de campanha criada
+            // 8 - Enviar mensagem de campanha criada
             await _messageService.SendCampaignCreatedEventMessage(campanha.Guid, campanha.Titulo, campanha.Descricao,
                 campanha.DataInicio, campanha.DataFim, campanha.MetaFinanceira, ct);
 
@@ -108,7 +110,7 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao cadastrar usuario: " + ex.Message, BaseLogType.LOG, ex.Message);
+            _logger.LogError("Erro ao cadastrar campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
             return Result<CriarCampanhaResponse>.Failure(ex.Message);
         }
     }
