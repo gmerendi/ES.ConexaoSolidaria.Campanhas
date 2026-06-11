@@ -1,20 +1,42 @@
-using Campanhas.Domain.Entities;
-using Campanhas.Domain.Enums;
-using Campanhas.Domain.Interfaces;
+using Campanhas.Domain.Entities.Campanhas;
 using Campanhas.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Campanhas.Infrastructure.Repositories;
 
-public sealed class CampanhaRepository : ICampanhaRepository
+public sealed class CampanhaRepository : EFRepository<Campanha>, ICampanhaRepository
 {
-    private readonly CampanhaDbContext _context;
+    private readonly string _connectionString;
 
-    public CampanhaRepository(CampanhaDbContext context)
+    public CampanhaRepository(ApplicationDbContext context, IConfiguration configuration) : base(context)
     {
-        _context = context;
+        _connectionString = configuration.GetConnectionString("ConnectionString") ?? "";
     }
 
+
+
+
+    public async Task<Campanha?> ObterPorTituloAsync(string titulo, CancellationToken ct = default)
+    {
+        return await _dbSet
+            .FirstOrDefaultAsync(u => u.Titulo.Valor.ToLower() == titulo.ToLower(), ct);
+    }
+
+
+    public new async Task<List<Campanha>> ObterTodosAsync(int page = 1, int pageLength = 9999, CancellationToken cancellationToken = default)
+    {
+
+        return await _dbSet.Skip((page - 1) * pageLength)   // pula os itens das páginas anteriores
+                     .Take(pageLength)                   // pega apenas o tamanho da página
+                     .ToListAsync(cancellationToken);
+    }
+
+
+
+
+
+    /*
     public async Task<Campanha?> GetByIdAsync(Guid id, CancellationToken ct = default) =>
         await _context.Campanhas.FirstOrDefaultAsync(c => c.Id == id, ct);
 
@@ -63,4 +85,5 @@ public sealed class CampanhaRepository : ICampanhaRepository
 
         return await query.ToListAsync(ct);
     }
+    */
 }

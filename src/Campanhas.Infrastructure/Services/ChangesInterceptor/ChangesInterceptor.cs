@@ -55,10 +55,10 @@ public class AuditInterceptor : SaveChangesInterceptor
             // Montagem das chaves padrão DynamoDB
             var audit = new AuditLog
             {
-                PK = $"ENTITY#{tableName}#{entity.Id}",
+                PK = $"ENTITY#{tableName}#{entity.Guid}",
                 SK = $"TS#{DateTime.UtcNow:O}",
-                ResourceId = entity.Id.ToString(),
-                ServiceName = "CS-USUARIOS-API", 
+                ResourceId = entity.Guid.ToString(),
+                ServiceName = "CS-CAMPANHAS-API", 
                 Operation = entry.State.ToString().ToUpper(),
                 ExpirationTime = DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds()
             };
