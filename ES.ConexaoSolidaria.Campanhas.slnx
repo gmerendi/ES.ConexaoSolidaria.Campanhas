@@ -6,7 +6,9 @@
     <Project Path="src/Campanhas.Domain/Campanhas.Domain.csproj" Id="474e8716-42d7-488a-8fbd-367a5b90cbca" />
     <Project Path="src/Campanhas.Infrastructure/Campanhas.Infrastructure.csproj" Id="dec64a20-c3cc-4ebf-b933-d9133878488c" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/Campanhas.Test/Campanhas.Test.csproj" Id="e20fe8b6-263a-4ee9-9f64-39f8b9dad624" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
