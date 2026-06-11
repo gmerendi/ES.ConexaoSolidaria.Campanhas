@@ -87,8 +87,8 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter usuario: " + ex.Message, BaseLogType.LOG, ex.Message);
-                throw new ApplicationException("Ocorreu um erro ao obter o usuário. " + ex.Message);
+                _logger.LogError("Erro ao obter campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+                throw new ApplicationException("Ocorreu um erro ao obter a campanha. " + ex.Message);
             }
         }
     }

@@ -7,7 +7,7 @@ using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 var logCounter = 0;
-var logTotal = 10;
+var logTotal = 7;
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Configuration
@@ -72,6 +72,7 @@ builder.Services.AddMessaging(builder.Configuration, logger);
 builder.Services.AddAuthenticationServices(builder.Configuration, logger);
 builder.Services.AddCacheService(builder.Configuration, logger);
 builder.Services.AddMetricsServices(logger);
+builder.Services.AddElasticSearch(builder.Configuration, logger);
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter, logTotal);
 
 

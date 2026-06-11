@@ -13,35 +13,17 @@ namespace Campanhas.Api.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [Produces("application/json")]
-public sealed class CampanhasController : ControllerBase
+public sealed class DoacoesController : ControllerBase
 {
-    private readonly IBaseLogger<CampanhasController> _logger;
-    private readonly IUseCaseHandler<CriarCampanhaCommand, Result<CriarCampanhaResponse>> _criarCampanhaCommandHandler;
-    private readonly IUseCaseHandler<AlterarCampanhaCommand, Result<AlterarCampanhaResponse>> _alterarCampanhaCommandHandler;
-    private readonly IUseCaseHandler<ObterCampanhaQuery, Result<ObterCampanhaResponse>> _obterCampanhaQueryHandler;
-    private readonly IUseCaseHandler<ObterTodasCampanhasQuery, Result<ObterTodasCampanhasResponse>> _obterTodasCampanhasQueryHandler;
-    private readonly IUseCaseHandler<CancelarCampanhaCommand, Result<bool>> _cancelarCampanhaCommandHandler;
-    private readonly IUseCaseHandler<ConcluirCampanhaCommand, Result<bool>> _concluirCampanhaCommandHandler;
-    private readonly IUseCaseHandler<ObterCampanhaAvancadoQuery, Result<ObterCampanhaAvancadoResponse>> _obterCampanhaAvancadoQueryHandler;
+    private readonly IBaseLogger<DoacoesController> _logger;
+    private readonly IUseCaseHandler<CriarDoacaoCommand, Result<CriarDoacaoResponse>> _criarDoacaoCommandHandler;
 
-    public CampanhasController(IBaseLogger<CampanhasController> logger,
-        IUseCaseHandler<CriarCampanhaCommand, Result<CriarCampanhaResponse>> criarCampanhaCommandHandler,
-        IUseCaseHandler<AlterarCampanhaCommand, Result<AlterarCampanhaResponse>> alterarCampanhaCommandHandler,
-        IUseCaseHandler<ObterCampanhaQuery, Result<ObterCampanhaResponse>> obterCampanhaQueryHandler,
-        IUseCaseHandler<ObterTodasCampanhasQuery, Result<ObterTodasCampanhasResponse>> obterTodasCampanhasQueryHandler,
-        IUseCaseHandler<CancelarCampanhaCommand, Result<bool>> cancelarCampanhaCommandHandler,
-        IUseCaseHandler<ConcluirCampanhaCommand, Result<bool>> concluirCampanhaCommandHandler,
-        IUseCaseHandler<ObterCampanhaAvancadoQuery, Result<ObterCampanhaAvancadoResponse>> obterCampanhaAvancadoQueryHandler
-        )
+
+    public DoacoesController(IBaseLogger<DoacoesController> logger,
+        IUseCaseHandler<CriarDoacaoCommand, Result<CriarDoacaoResponse>> criarDoacaoCommandHandler)
     {
         _logger = logger;
-        _criarCampanhaCommandHandler = criarCampanhaCommandHandler;
-        _alterarCampanhaCommandHandler = alterarCampanhaCommandHandler;
-        _obterCampanhaQueryHandler = obterCampanhaQueryHandler;
-        _obterTodasCampanhasQueryHandler = obterTodasCampanhasQueryHandler;
-        _cancelarCampanhaCommandHandler = cancelarCampanhaCommandHandler;
-        _concluirCampanhaCommandHandler = concluirCampanhaCommandHandler;
-        _obterCampanhaAvancadoQueryHandler = obterCampanhaAvancadoQueryHandler;
+        _criarDoacaoCommandHandler = criarDoacaoCommandHandler;
     }
 
 
@@ -49,59 +31,43 @@ public sealed class CampanhasController : ControllerBase
 
 
     /// <summary>
-    /// UC-12 - Criar nova campanha
+    /// UC-19 - Realizar doacao
     /// </summary>
     /// <remarks>   
     /// 
-    /// Cria uma nova campanha de doações
+    /// Cria uma nova intencao de doacao a ser processada pelo worker.
     /// 
     /// **Esse endpoint requer autenticacao**
     /// 
     /// **Regras de Validação:**
     /// 
-    /// * **Titulo:**
+    /// * **Guid:**
     ///   - `O campo Titulo é obrigatório.`
-    ///   - `O Titulo deve ter no minimo 5 e no máximo 200 caracteres.`
-    /// * **Descricao:** 
-    ///   - `O campo Descricao é obrigatório.`
-    ///   - `A descrição deve ter no máximo 2000 caracteres.`
-    /// * **Meta Financeira:** 
-    ///   - `O campo Meta Financeira é obrigatório.`
-    ///   - `A meta financeira deve ser maior que 0 e menor que 9999999999999999.99.`
-    /// * **DataInicio:** 
-    ///   - `O campo Data de Inicio é obrigatório.`
-    ///   - `A data de inicio `
-    /// * **DataTermino:** 
-    ///   - `O campo Data de Termino é obrigatório.`
-    ///   - `A data de termino não pode ser no passado `
+    /// * **Valor:** 
+    ///   - `O campo Valor é obrigatório.`
+    ///   - `O valor deve ser maior que 0.`
     ///  
     /// 
     /// </remarks>
     /// <param name="request"></param>
-    /// <returns>CampanhaDTO</returns>
-    /// <response code="201">Campanha criada com sucesso.</response>
+    /// <returns>true</returns>
+    /// <response code="201">Intencao de doacao criada com sucesso</response>
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
-    [Authorize(Roles = "GESTOR_ONG")]
+    [Authorize(Roles = "GESTOR_ONG, DOADOR")]
     [HttpPost]
     [ProducesResponseType(typeof(CriarCampanhaResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CriarCampanha([FromBody] CriarCampanhaRequest request, CancellationToken ct)
+    public async Task<IActionResult> CriarDoacao([FromBody] CriarDoacaoRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando criação de campanha: " + request.Titulo, BaseLogType.LOG, request);
-        var command = new CriarCampanhaCommand(
-            request.Titulo,
-            request.Descricao,
-            request.MetaFinanceira,
-            request.DataInicio,
-            request.DataFim
-            );
+        _logger.LogInformation("Iniciando criação de intencao de doacao para a campanha: " + request.Guid, BaseLogType.LOG, request);
+        var command = new CriarDoacaoCommand(request.Guid, request.Valor);
 
-        var result = await _criarCampanhaCommandHandler.HandleAsync(command, ct);
+        var result = await _criarDoacaoCommandHandler.HandleAsync(command, ct);
 
         if (!result.IsSuccess)
         {
@@ -109,12 +75,12 @@ public sealed class CampanhasController : ControllerBase
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanha criada com sucesso: " + result.Value.Titulo, BaseLogType.LOG, result.Value);
-        return Created("Campanha criada com sucesso", result);
+        _logger.LogInformation("Intencao de doacao criada com sucesso: " + result.Value, BaseLogType.LOG, result.Value);
+        return Created("Intencao de doacao criada com sucesso", result);
     }
 
 
-
+    /*
 
     /// <summary>
     /// UC-13 - Visualizar os dados de uma campanha
@@ -416,5 +382,6 @@ public sealed class CampanhasController : ControllerBase
         _logger.LogInformation("Campanhas obtidas com sucesso. ", BaseLogType.LOG, result.Value);
         return Ok(result);
     }
+    */
     
 }

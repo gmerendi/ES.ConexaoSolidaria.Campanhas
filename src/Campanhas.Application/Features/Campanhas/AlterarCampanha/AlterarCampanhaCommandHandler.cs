@@ -15,10 +15,11 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
     private readonly IMessageService _messageService;
     private readonly ICacheService _cacheService;
     private readonly IMetricsService _metrics;
+    private readonly IElasticSearchService _elasticSearchService;
 
     public AlterarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
         IBaseLogger<AlterarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics)
+        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
@@ -26,7 +27,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
         _messageService = messageService;
         _cacheService = cacheService;
         _metrics = metrics;
-
+        _elasticSearchService = elasticSearchService;
     }
 
     public async Task<Result<AlterarCampanhaResponse>> HandleAsync(AlterarCampanhaCommand command, CancellationToken ct = default)
@@ -76,12 +77,15 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
                 solicitante.Email
                 );
             await _campanhaRepository.AlterarAsync(campanhaExistente);
-
-
+           
             // 5 - Remove campanha do cache
             var cacheKey = $"campanha:{campanhaExistente.Guid}";
             await _cacheService.RemoveAsync(cacheKey);
             await _cacheService.RemoveByPrefixAsync("campanhas:ativas");
+
+            // 6 - Faz update no ElasticSearch
+            var campanhaDTO = CampanhaDTO.FromEntity(campanhaExistente);
+            await _elasticSearchService.UpdateAsync(campanhaDTO);
 
             CampanhaDTO campanhaResponse = CampanhaDTO.FromEntity(campanhaExistente);
             var response = new AlterarCampanhaResponse(
@@ -103,7 +107,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao cadastrar usuario: " + ex.Message, BaseLogType.LOG, ex.Message);
+            _logger.LogError("Erro ao alterar campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
             return Result<AlterarCampanhaResponse>.Failure(ex.Message);
         }
     }

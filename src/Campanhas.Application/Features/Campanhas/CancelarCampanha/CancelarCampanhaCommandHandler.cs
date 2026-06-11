@@ -14,14 +14,19 @@ namespace Campanhas.Application.Features.Campanhas
         private readonly IUserContext _userContext;
         private readonly IBaseLogger<CancelarCampanhaCommandHandler> _logger;
         private readonly ICacheService _cacheService;
+        private readonly IMetricsService _metrics;
+        private readonly IElasticSearchService _elasticSearchService;
 
         public CancelarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
-            IBaseLogger<CancelarCampanhaCommandHandler> logger, ICacheService cacheService)
+            IBaseLogger<CancelarCampanhaCommandHandler> logger, ICacheService cacheService,
+            IMetricsService metrics, IElasticSearchService elasticSearchService)
         {
             _campanhaRepository = campanhaRepository;
             _userContext = userContext;
             _logger = logger;
             _cacheService = cacheService;
+            _metrics = metrics;
+            _elasticSearchService = elasticSearchService;
         }
 
         public async Task<Result<bool>> HandleAsync(CancelarCampanhaCommand command, CancellationToken ct)
@@ -74,6 +79,13 @@ namespace Campanhas.Application.Features.Campanhas
                 var cacheKey = $"campanha:{command.Guid}";
                 await _cacheService.RemoveAsync(cacheKey);
                 await _cacheService.RemoveByPrefixAsync("campanhas:ativas");
+
+                // 6 - Faz update no ElasticSearch
+                var campanhaDTO = CampanhaDTO.FromEntity(campanha);
+                await _elasticSearchService.UpdateAsync(campanhaDTO);
+
+                // ── Métrica de negócio ─────────────────────────────────────────
+                _metrics.IncrementarCampanhaCancelada();
 
                 return Result<bool>.Success(true);
             }
