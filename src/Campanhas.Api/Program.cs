@@ -1,7 +1,9 @@
+using Camapanhas.Application.Extensions;
 using Campanhas.Api.Configuration;
 using Campanhas.Api.Extensions;
 using Campanhas.Api.Middlewares;
 using Campanhas.Infrastructure.Extensions;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 var logCounter = 0;
@@ -38,6 +40,7 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Endpoints "
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
 builder.Services.AddSwaggerConfiguration(logger);
+builder.Services.AddHealthCheckConfiguration(logger);
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
 
 
@@ -45,7 +48,7 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensi
 // ── Application Extensions
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Application Extensions ", logCounter++, logTotal);
-builder.Services.AddUseCaseServices();
+builder.Services.AddUseCaseServices(logger);
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Application Extensions ", logCounter, logTotal);
 
 
@@ -68,7 +71,7 @@ builder.Services.AddAuditLog(builder.Configuration, logger);
 builder.Services.AddMessaging(builder.Configuration, logger);
 builder.Services.AddAuthenticationServices(builder.Configuration, logger);
 builder.Services.AddCacheService(builder.Configuration, logger);
-builder.Services.AddHealthCheckServices();
+builder.Services.AddMetricsServices(logger);
 logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter, logTotal);
 
 
@@ -76,20 +79,26 @@ var app = builder.Build();
 
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ── Middlewares  (ANTES do MapControllers — ordem correta)
+// ── Middlewares
 // ──────────────────────────────────────────────────────────────────────────────
 logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Middlewares ", logCounter++, logTotal);
-app.UseSwaggerMiddleware(logger);
-app.UseExceptionMiddleware();
 app.UseCorrelationMiddleware();
+app.UseExceptionMiddleware();
 app.UseTokenBlacklistMiddleware();
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Middlewares ", logCounter, logTotal);
-
-app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSwaggerMiddleware(logger);
+app.UseMetricsMiddleware();
 app.MapControllers();
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Middlewares ", logCounter, logTotal);
+
+
+// ──────────────────────────────────────────────────────────────────────────────
+// ── Observability
+// ──────────────────────────────────────────────────────────────────────────────
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Metrics ", logCounter++, logTotal);
+app.UseMetricServer();
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Metrics ", logCounter, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -103,7 +112,8 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Migrations 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Health Check Mappings
 // ──────────────────────────────────────────────────────────────────────────────
-app.MapHealthCheckEndpoints();
+app.MapCustomHealthChecks();
+
 
 
 app.Run();

@@ -1,3 +1,4 @@
+using Campanhas.Domain.Entities.Campanhas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,7 +18,7 @@ namespace Campanhas.Infrastructure.Data
 
 
         /****** DbSets ******/
-        //public DbSet<Usuario> Usuario { get; set; } <- criar os dbsets necessarios
+        public DbSet<Campanha> Campanha { get; set; }
 
 
 
@@ -50,7 +51,7 @@ namespace Campanhas.Infrastructure.Data
                     else
                     {
                         
-                        basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Usuarios.Api"));
+                        basePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Campanhas.Api"));
                     }
 
                     while (!File.Exists(Path.Combine(basePath, "appsettings.json")) && basePath != null)

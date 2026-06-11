@@ -1,4 +1,4 @@
-﻿using Campanhas.Domain.Interfaces;
+﻿using Campanhas.Domain.Entities.Campanhas;
 using Campanhas.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

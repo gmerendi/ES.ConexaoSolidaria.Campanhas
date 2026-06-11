@@ -79,11 +79,38 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo Descricao deve possuir no maximo 2000 caracteres.
+        /// </summary>
+        public static string _400_DESCRIPTION_LENGTH_INVALID {
+            get {
+                return ResourceManager.GetString("400_DESCRIPTION_LENGTH_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Descricao é obrigatório..
+        /// </summary>
+        public static string _400_DESCRIPTION_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_DESCRIPTION_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo E-mail é obrigatório..
         /// </summary>
         public static string _400_EMAIL_REQUIRED {
             get {
                 return ResourceManager.GetString("400_EMAIL_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Data de Termino é obrigatório.
+        /// </summary>
+        public static string _400_ENDDATE_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_ENDDATE_REQUIRED", resourceCulture);
             }
         }
         
@@ -142,6 +169,15 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo Data de Inicio é obrigatório.
+        /// </summary>
+        public static string _400_STARTDATE_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_STARTDATE_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status invalido.
         /// </summary>
         public static string _400_STATUS_INVALID {
@@ -156,6 +192,42 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _400_STATUS_REQUIRED {
             get {
                 return ResourceManager.GetString("400_STATUS_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Meta Financeira deve ser no mínimo 0.01 e no máximo 9999999999999999.99.
+        /// </summary>
+        public static string _400_TARGET_RANGE_INVALID {
+            get {
+                return ResourceManager.GetString("400_TARGET_RANGE_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Meta Financeira é obrigatório.
+        /// </summary>
+        public static string _400_TARGET_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_TARGET_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Titulo deve possuir entre 5 e 200 caracteres.
+        /// </summary>
+        public static string _400_TITLE_LENGTH_INVALID {
+            get {
+                return ResourceManager.GetString("400_TITLE_LENGTH_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo Titulo é obrigatório.
+        /// </summary>
+        public static string _400_TITLE_REQUIRED {
+            get {
+                return ResourceManager.GetString("400_TITLE_REQUIRED", resourceCulture);
             }
         }
         
@@ -192,6 +264,15 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _401_TOKEN_REVOKED {
             get {
                 return ResourceManager.GetString("401_TOKEN_REVOKED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Somente Gestores podem criar ou modificar campanhas.
+        /// </summary>
+        public static string _403_CAMPAIGN_CAN_BE_CHANGED_BY_MANAGER {
+            get {
+                return ResourceManager.GetString("403_CAMPAIGN_CAN_BE_CHANGED_BY_MANAGER", resourceCulture);
             }
         }
         
@@ -277,6 +358,51 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apenas campanhas ativas podem ser editadas..
+        /// </summary>
+        public static string _422_CAMPAIGN_ACTIVE_CAN_BE_EDITED {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_ACTIVE_CAN_BE_EDITED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apenas campanhas ativas podem ser concluídas..
+        /// </summary>
+        public static string _422_CAMPAIGN_ACTIVE_CAN_BE_FINISHED {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_ACTIVE_CAN_BE_FINISHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nenhuma acao tomada. A Campanha já está cancelada..
+        /// </summary>
+        public static string _422_CAMPAIGN_ALREADY_CANCELLED {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_ALREADY_CANCELLED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titulo já existente na lista de campanhas.
+        /// </summary>
+        public static string _422_CAMPAIGN_DUPLICATED {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_DUPLICATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Campanha está concluída e não pode ser cancelada..
+        /// </summary>
+        public static string _422_CAMPAIGN_FINISHED_CANNOT_CANCEL {
+            get {
+                return ResourceManager.GetString("422_CAMPAIGN_FINISHED_CANNOT_CANCEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CPF já existente na lista de usuários.
         /// </summary>
         public static string _422_CPF_DUPLICATED {
@@ -300,6 +426,15 @@ namespace Campanhas.Domain.Shared.Resources {
         public static string _422_CPF_INVALID_LENGTH {
             get {
                 return ResourceManager.GetString("422_CPF_INVALID_LENGTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data de fim deve ser posterior à data de início..
+        /// </summary>
+        public static string _422_DATES_MISMATCHING {
+            get {
+                return ResourceManager.GetString("422_DATES_MISMATCHING", resourceCulture);
             }
         }
         

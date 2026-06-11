@@ -231,4 +231,61 @@
   <data name="403_FORBIDDEN_CANNOT_SUSPEND_SELF" xml:space="preserve">
     <value>Um gestor não pode suspender o próprio perfil.</value>
   </data>
+  <data name="400_TITLE_REQUIRED" xml:space="preserve">
+    <value>O campo Titulo é obrigatório</value>
+  </data>
+  <data name="400_TITLE_LENGTH_INVALID" xml:space="preserve">
+    <value>O campo Titulo deve possuir entre 5 e 200 caracteres</value>
+  </data>
+  <data name="400_DESCRIPTION_REQUIRED" xml:space="preserve">
+    <value>O campo Descricao é obrigatório.</value>
+  </data>
+  <data name="400_DESCRIPTION_LENGTH_INVALID" xml:space="preserve">
+    <value>O campo Descricao deve possuir no maximo 2000 caracteres</value>
+  </data>
+  <data name="422_CAMPAIGN_ALREADY_CANCELLED" xml:space="preserve">
+    <value>Nenhuma acao tomada. A Campanha já está cancelada.</value>
+  </data>
+  <data name="422_CAMPAIGN_FINISHED_CANNOT_CANCEL" xml:space="preserve">
+    <value>A Campanha está concluída e não pode ser cancelada.</value>
+  </data>
+  <data name="400_TARGET_REQUIRED" xml:space="preserve">
+    <value>O campo Meta Financeira é obrigatório</value>
+  </data>
+  <data name="400_STARTDATE_REQUIRED" xml:space="preserve">
+    <value>O campo Data de Inicio é obrigatório</value>
+  </data>
+  <data name="400_ENDDATE_REQUIRED" xml:space="preserve">
+    <value>O campo Data de Termino é obrigatório</value>
+  </data>
+  <data name="400_TARGET_RANGE_INVALID" xml:space="preserve">
+    <value>O campo Meta Financeira deve ser no mínimo 0.01 e no máximo 9999999999999999.99</value>
+  </data>
+  <data name="422_CAMPAIGN_DUPLICATED" xml:space="preserve">
+    <value>Titulo já existente na lista de campanhas</value>
+  </data>
+  <data name="422_CAMPAIGN_ACTIVE_CAN_BE_EDITED" xml:space="preserve">
+    <value>Apenas campanhas ativas podem ser editadas.</value>
+  </data>
+  <data name="422_DATES_MISMATCHING" xml:space="preserve">
+    <value>Data de fim deve ser posterior à data de início.</value>
+  </data>
+  <data name="422_CAMPAIGN_ACTIVE_CAN_BE_FINISHED" xml:space="preserve">
+    <value>Apenas campanhas ativas podem ser concluídas.</value>
+  </data>
+  <data name="403_CAMPAIGN_CAN_BE_CHANGED_BY_MANAGER" xml:space="preserve">
+    <value>Somente Gestores podem criar ou modificar campanhas</value>
+  </data>
+  <data name="400_CAMPAIGN_DOES_NOT_EXIST" xml:space="preserve">
+    <value>Nao existe campanha com o Guid especificado</value>
+  </data>
+  <data name="400_CAMPAIGN_NOT_FOUND" xml:space="preserve">
+    <value>Campanha nao encontrada</value>
+  </data>
+  <data name="400_CAMPAIGN_NONE_ACTIVE" xml:space="preserve">
+    <value>Nao existe nenhuma campanha ativa no momento</value>
+  </data>
+  <data name="422_CAMPAIGN_NOT_ACTIVE" xml:space="preserve">
+    <value>A campanha não esta ativa</value>
+  </data>
 </root>
