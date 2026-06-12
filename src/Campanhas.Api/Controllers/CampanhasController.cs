@@ -10,8 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Campanhas.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-[Authorize]
+[Route("api/v1/[controller]")]
 [Produces("application/json")]
 public sealed class CampanhasController : ControllerBase
 {
@@ -138,7 +137,7 @@ public sealed class CampanhasController : ControllerBase
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
-    [Authorize(Roles = "GESTOR_ONG")]
+    [Authorize(Roles = "GESTOR_ONG, DOADOR")]
     [HttpGet]
     [ProducesResponseType(typeof(ObterCampanhaResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -230,6 +229,7 @@ public sealed class CampanhasController : ControllerBase
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
+    [Authorize(Roles = "GESTOR_ONG")]
     [HttpPut("cancel")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -274,6 +274,7 @@ public sealed class CampanhasController : ControllerBase
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
+    [Authorize(Roles = "GESTOR_ONG")]
     [HttpPut("concluir")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -393,7 +394,7 @@ public sealed class CampanhasController : ControllerBase
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
-    [Authorize(Roles = "GESTOR_ONG")]
+    [Authorize(Roles = "GESTOR_ONG, DOADOR")]
     [HttpGet("busca")]
     [ProducesResponseType(typeof(ObterCampanhaAvancadoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
