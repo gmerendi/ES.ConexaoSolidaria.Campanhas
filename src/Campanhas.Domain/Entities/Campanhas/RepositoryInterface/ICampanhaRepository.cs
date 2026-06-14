@@ -6,5 +6,6 @@ namespace Campanhas.Domain.Entities.Campanhas
     {
         Task<Campanha?> ObterPorTituloAsync(string email, CancellationToken ct = default);
         Task <List<Campanha>> ObterTodosAsync(int page, int pageLength, CancellationToken ct = default);
+        Task ObterEAlterarAsync(Campanha campanha, decimal doacao, CancellationToken cancellationToken = default);
     }
 }

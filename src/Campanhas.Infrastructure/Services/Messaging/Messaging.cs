@@ -35,12 +35,12 @@ namespace Campanhas.Infrastructure.Services.Messaging
 
 
 
-        public async Task SendDonationCreatedEventMessage(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, CancellationToken ct)
+        public async Task SendDonationCreatedEventMessage(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor,CancellationToken ct)
         {
 
             try
             {
-                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha, _correlationIdGenerator.Get());
+                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha,cpf, valor, _correlationIdGenerator.Get());
                 await _publish.Publish(eventMessage, ct);
                 _logger.LogInformation("Evento DonationCreatedEvent publicado para o Broker. Email: " + email, BaseLogType.EVENT, eventMessage);
             }

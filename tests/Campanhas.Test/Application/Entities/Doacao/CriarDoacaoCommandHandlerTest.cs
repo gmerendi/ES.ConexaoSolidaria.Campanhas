@@ -90,7 +90,8 @@ public class CriarDoacaoCommandHandlerTests
         _messageServiceMock
             .Setup(m => m.SendDonationCreatedEventMessage(
                 It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(),
+                It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -118,7 +119,8 @@ public class CriarDoacaoCommandHandlerTests
         _messageServiceMock
             .Setup(m => m.SendDonationCreatedEventMessage(
                 It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), 
+                It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -127,7 +129,8 @@ public class CriarDoacaoCommandHandlerTests
         // Assert
         _messageServiceMock.Verify(m => m.SendDonationCreatedEventMessage(
             It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-            campanha.Guid, campanha.Titulo.Valor, It.IsAny<CancellationToken>()), Times.Once);
+            campanha.Guid, campanha.Titulo.Valor, It.IsAny<string>(), It.IsAny<decimal>(), 
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -145,7 +148,8 @@ public class CriarDoacaoCommandHandlerTests
         _messageServiceMock
             .Setup(m => m.SendDonationCreatedEventMessage(
                 It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), 
+                It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -170,7 +174,8 @@ public class CriarDoacaoCommandHandlerTests
         _messageServiceMock
             .Setup(m => m.SendDonationCreatedEventMessage(
                 It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<decimal>(), 
+                It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act

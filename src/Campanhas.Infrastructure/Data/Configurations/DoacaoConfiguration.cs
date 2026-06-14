@@ -39,6 +39,12 @@ public sealed class DoacaoConfiguration : IEntityTypeConfiguration<Doacao>
                 .HasColumnType("numeric(18,2)")
                 .IsRequired();
 
+        builder.Property(u => u.CorrelationId)
+               .HasColumnName("correlation_id")
+               .IsRequired()
+               .HasMaxLength(200)
+               .HasColumnType("varchar(100)");
+
         // Mapeamento de Enums como String
         builder.Property(u => u.Status)
                .HasColumnName("status")
