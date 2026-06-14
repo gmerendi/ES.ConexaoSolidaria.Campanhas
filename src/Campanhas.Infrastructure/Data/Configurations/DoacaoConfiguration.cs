@@ -1,15 +1,15 @@
-using Campanhas.Domain.Entities.Campanhas;
+using Campanhas.Domain.Entities.Doacoes;
 using Campanhas.Domain.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Campanhas.Infrastructure.Data.Configurations;
 
-public sealed class CampanhaConfiguration : IEntityTypeConfiguration<Campanha>
+public sealed class DoacaoConfiguration : IEntityTypeConfiguration<Doacao>
 {
-    public void Configure(EntityTypeBuilder<Campanha> builder)
+    public void Configure(EntityTypeBuilder<Doacao> builder)
     {
-        builder.ToTable("campanha", schema: "operacao");
+        builder.ToTable("doacao", schema: "operacao");
 
         // Chave Primária
         builder.HasKey(u => u.Guid);
@@ -18,24 +18,24 @@ public sealed class CampanhaConfiguration : IEntityTypeConfiguration<Campanha>
             .HasColumnName("guid");
 
         // Propriedades Tradicionais
-        builder.Property(c => c.Descricao)
-            .HasMaxLength(2000)
-            .HasColumnType("varchar(2000)")
-            .HasColumnName("descricao")
+        builder.Property(u => u.GuidUsuario)
+            .HasColumnType("uuid")
+            .HasColumnName("guid_usuario")
             .IsRequired();
 
-        builder.Property(u => u.DataInicio)
-                .HasColumnName("data_inicio")
-                .IsRequired()
-                .HasColumnType("timestamp with time zone");
+        builder.Property(u => u.NomeUsuario)
+               .HasColumnName("nome_usuario")
+               .IsRequired()
+               .HasMaxLength(200)
+               .HasColumnType("varchar(200)");
 
-        builder.Property(u => u.DataFim)
-                .HasColumnName("data_fim")
-                .IsRequired()
-                .HasColumnType("timestamp with time zone");
+        builder.Property(u => u.GuidCampanha)
+            .HasColumnType("uuid")
+            .HasColumnName("guid_campanha")
+            .IsRequired();
 
-        builder.Property(c => c.ValorArrecadado)
-                .HasColumnName("valor_arrecadado")
+        builder.Property(c => c.ValorDoacao)
+                .HasColumnName("valor_doacao")
                 .HasColumnType("numeric(18,2)")
                 .IsRequired();
 
@@ -47,12 +47,6 @@ public sealed class CampanhaConfiguration : IEntityTypeConfiguration<Campanha>
                .HasMaxLength(30)
                .HasColumnType("varchar(30)");
 
-        builder.Property(u => u.StatusCampanha)
-               .HasColumnName("status_campanha")
-               .IsRequired()
-               .HasConversion<string>()
-               .HasMaxLength(30)
-               .HasColumnType("varchar(30)");
 
         // Propriedades de Auditoria
         builder.Property(u => u.CriadoPor)
@@ -76,22 +70,32 @@ public sealed class CampanhaConfiguration : IEntityTypeConfiguration<Campanha>
                 .HasColumnType("timestamp with time zone");
 
         // Mapeamento dos Value Objects 
-        builder.OwnsOne(c => c.Titulo, titulo =>
+        builder.OwnsOne(c => c.TituloCampanha, titulo =>
         {
             titulo.Property(t => t.Valor)
-                .HasColumnName("titulo")
+                .HasColumnName("titulo_campanha")
                 .HasMaxLength(TituloCampanha.TamanhoMaximo)
                 .IsRequired()
                 .HasColumnType("varchar(200)");
         });
 
-        builder.OwnsOne(c => c.MetaFinanceira, meta =>
+        builder.OwnsOne(u => u.EmailUsuario, emailBuilder =>
         {
-            meta.Property(m => m.Valor)
-                .HasColumnName("meta_financeira")
-                .HasColumnType("numeric(18,2)")
-                .IsRequired();
+            emailBuilder.Property(e => e.Endereco)
+                .HasColumnName("email_usuario")
+                .IsRequired()
+                .HasMaxLength(150)
+                .HasColumnType("varchar(150)");
         });
 
+
+        builder.OwnsOne(u => u.CpfUsuario, cpfBuilder =>
+        {
+            cpfBuilder.Property(c => c.Numero)
+                .HasColumnName("cpf_usuario")
+                .IsRequired()
+                .HasMaxLength(11)
+                .HasColumnType("varchar(11)");
+        });
     }
 }

@@ -1,6 +1,6 @@
 using Campanhas.Domain.Shared.Exceptions;
 
-namespace Campanhas.Domain.Entities.Campanhas;
+namespace Campanhas.Domain.Entities.ValueObjects;
 
 public sealed class TituloCampanha
 {

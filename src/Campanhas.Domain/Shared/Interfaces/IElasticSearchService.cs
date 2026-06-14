@@ -4,7 +4,7 @@ namespace Campanhas.Domain.Shared.Interfaces
 {
     public interface IElasticSearchService
     {
-        Task<IEnumerable<CampanhaDTO>> SearchAsync(string term);
+        Task<IEnumerable<CampanhaSemArrecadacaoDTO>> SearchAsync(string term);
         Task IndexAsync(CampanhaDTO term);
         Task<bool> IndexExistsAsync(string index);
         Task<long> CountAsync();

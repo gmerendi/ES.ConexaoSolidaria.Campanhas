@@ -1,9 +1,11 @@
 using Campanhas.Application.Shared;
 using Campanhas.Domain.Entities.Campanhas;
+using Campanhas.Domain.Entities.ValueObjects;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Primitives;
+using Microsoft.Extensions.Configuration;
 
 namespace Campanhas.Application.Features.Campanhas;
 
@@ -73,16 +75,11 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
             // 5 - Gravar a campanha
             await _campanhaRepository.CadastrarAsync(campanha);
 
-            // 6 - Inserir no cache
+            // 6 - Insere no elasticsearch
             var campanhaDTO = CampanhaDTO.FromEntity(campanha);
-            var cacheKey = $"campanha:{campanhaDTO.Guid}";
-            await _cacheService.SetAsync(cacheKey, campanhaDTO, TimeSpan.FromMinutes(30));
-            await _cacheService.RemoveByPrefixAsync("campanhas:ativas");
-
-            // 7 - Insere no elasticsearch
             await _elasticSearchService.IndexAsync(campanhaDTO);
 
-            // 8 - Enviar mensagem de campanha criada
+            // 7 - Enviar mensagem de campanha criada
             await _messageService.SendCampaignCreatedEventMessage(campanha.Guid, campanha.Titulo, campanha.Descricao,
                 campanha.DataInicio, campanha.DataFim, campanha.MetaFinanceira, ct);
 
