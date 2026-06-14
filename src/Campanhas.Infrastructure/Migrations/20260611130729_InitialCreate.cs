@@ -32,6 +32,7 @@ namespace Campanhas.Infrastructure.Migrations
                     modificado_por = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true),
                     data_modificacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     status = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    
                 },
                 constraints: table =>
                 {
@@ -57,7 +58,8 @@ namespace Campanhas.Infrastructure.Migrations
                     criado_por = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false),
                     data_criacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modificado_por = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true),
-                    data_modificacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    data_modificacao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    correlation_id = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                 },
                 constraints: table =>
                 {

@@ -13,4 +13,12 @@ public sealed class DoacaoRepository : EFRepository<Doacao>, IDoacaoRepository
     {
         _connectionString = configuration.GetConnectionString("ConnectionString") ?? "";
     }
+
+
+
+    public async Task<Doacao?> ObterPorCorrelationIdAsync(string correlationId, CancellationToken ct = default)
+    {
+        return await _dbSet
+            .FirstOrDefaultAsync(u => u.CorrelationId.ToLower() == correlationId.ToLower(), ct);
+    }
 }

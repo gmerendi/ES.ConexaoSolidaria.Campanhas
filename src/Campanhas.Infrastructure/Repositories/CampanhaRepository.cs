@@ -32,4 +32,12 @@ public sealed class CampanhaRepository : EFRepository<Campanha>, ICampanhaReposi
                      .ToListAsync(cancellationToken);
     }
 
+
+    public new async Task ObterEAlterarAsync(Campanha campanha, decimal doacao, CancellationToken cancellationToken = default)
+    {
+
+        await _dbSet.Where(c => c.Guid == campanha.Guid).ExecuteUpdateAsync(s =>
+                            s.SetProperty(c => c.ValorArrecadado, c => c.ValorArrecadado + doacao));
+    }
+
 }

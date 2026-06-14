@@ -1,7 +1,8 @@
-﻿using Campanhas.Domain.ValueObjects;
-using Campanhas.Domain.Entities.ValueObjects;
+﻿using Campanhas.Domain.Entities.ValueObjects;
 using Campanhas.Domain.Shared.Entity;
 using Campanhas.Domain.Shared.Helpers;
+using Campanhas.Domain.ValueObjects;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Campanhas.Domain.Entities.Doacoes;
 
@@ -14,11 +15,13 @@ public sealed class Doacao : EntityBase
     public Guid GuidCampanha { get; private set; }
     public TituloCampanha TituloCampanha { get; private set; }
     public decimal ValorDoacao { get; private set; }
+    public string CorrelationId { get; private set; }
 
     private Doacao() { }
 
+    [SetsRequiredMembers]
     public Doacao(Guid guidUsuario, string nomeUsuario, Email emailUsuario, Cpf cpfUsuario,
-        Guid guidCampanha, TituloCampanha tituloCampanha, decimal valorDoacao)
+        Guid guidCampanha, TituloCampanha tituloCampanha, decimal valorDoacao, string correlationId)
     {
         NomeAssertions(nomeUsuario);
         EmailAssertions(emailUsuario);
@@ -34,6 +37,8 @@ public sealed class Doacao : EntityBase
         GuidCampanha = guidCampanha;
         TituloCampanha = tituloCampanha;
         ValorDoacao = valorDoacao;
+        CriadoPor = "Worker";
+        CorrelationId = correlationId;
     }
 
 
