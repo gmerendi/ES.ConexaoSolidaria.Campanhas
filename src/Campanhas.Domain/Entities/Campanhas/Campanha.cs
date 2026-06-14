@@ -1,4 +1,5 @@
 using Campanhas.Domain.Entities.Campanhas.Enums;
+using Campanhas.Domain.Entities.ValueObjects;
 using Campanhas.Domain.Shared.Entity;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Helpers;

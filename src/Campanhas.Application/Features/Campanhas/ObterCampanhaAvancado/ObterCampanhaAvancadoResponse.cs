@@ -3,6 +3,6 @@
 namespace Campanhas.Application.Features.Campanhas
 {
     public record ObterCampanhaAvancadoResponse(
-    IEnumerable<CampanhaDTO> Campanhas
+    IEnumerable<CampanhaSemArrecadacaoDTO> Campanhas
     );
 }

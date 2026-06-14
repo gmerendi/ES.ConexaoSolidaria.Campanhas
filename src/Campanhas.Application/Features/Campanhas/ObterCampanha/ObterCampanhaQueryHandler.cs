@@ -1,9 +1,11 @@
 using Campanhas.Application.Shared;
 using Campanhas.Domain.Entities.Campanhas;
+using Campanhas.Domain.Entities.Campanhas.Enums;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Primitives;
+using Microsoft.Extensions.Configuration;
 
 namespace Campanhas.Application.Features.Campanhas
 {
@@ -13,14 +15,16 @@ namespace Campanhas.Application.Features.Campanhas
         private readonly IUserContext _userContext;
         private readonly IBaseLogger<ObterCampanhaQueryHandler> _logger;
         private readonly ICacheService _cacheService;
+        private readonly IConfiguration _configuration;
 
         public ObterCampanhaQueryHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
-            IBaseLogger<ObterCampanhaQueryHandler> logger, ICacheService cacheService)
+            IBaseLogger<ObterCampanhaQueryHandler> logger, ICacheService cacheService, IConfiguration configuration)
         {
             _campanhaRepository = campanhaRepository;
             _userContext = userContext;
             _logger = logger;
             _cacheService = cacheService;
+            _configuration = configuration;
         }
 
         public async Task<Result<ObterCampanhaResponse>> HandleAsync(ObterCampanhaQuery command, CancellationToken ct)
@@ -61,7 +65,10 @@ namespace Campanhas.Application.Features.Campanhas
                     }
                     // 5 - Insere campanha no cache
                     campanha = CampanhaDTO.FromEntity(campanhaDb);
-                    await _cacheService.SetAsync(cacheKey, campanha, TimeSpan.FromMinutes(30));
+                    var ttlAtiva = _configuration.GetValue<int>("Cache:CampanhaAtivaTTLSeconds");
+                    var ttlNaoAtiva = _configuration.GetValue<int>("Cache:CampanhaAtivaTTLSeconds");
+                    var ttl = campanhaDb.StatusCampanha == CampanhaStatus.ATIVA ? ttlAtiva : ttlNaoAtiva;
+                    await _cacheService.SetAsync(cacheKey, campanha, TimeSpan.FromSeconds(ttl));
                 }
                 else
                 {

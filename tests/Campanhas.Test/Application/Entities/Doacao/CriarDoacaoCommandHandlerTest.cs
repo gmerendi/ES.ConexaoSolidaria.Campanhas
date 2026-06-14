@@ -1,6 +1,7 @@
 ﻿using Campanhas.Application.Features.Campanhas;
 using Campanhas.Domain.Entities.Campanhas;
 using Campanhas.Domain.Entities.Campanhas.Enums;
+using Campanhas.Domain.Entities.ValueObjects;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;

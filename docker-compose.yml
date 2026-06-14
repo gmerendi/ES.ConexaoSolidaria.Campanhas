@@ -144,6 +144,10 @@ services:
       Jwt__Audience: "ES-ConexaoSolidariaClient"
       Jwt__ExpirationHours: "3"
 
+      # Cache TTL
+      Cache__CampanhaAtivaTTLSeconds: "60"
+      Cache__CampanhaNaoAtivaTTLSeconds: "86400"
+
       #Logs
       CustomLogging__LogInfo: "True"
       CustomLogging__LogError: "True"

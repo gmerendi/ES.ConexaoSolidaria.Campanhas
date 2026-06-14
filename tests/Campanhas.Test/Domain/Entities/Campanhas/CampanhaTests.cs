@@ -1,5 +1,6 @@
 ﻿using Campanhas.Domain.Entities.Campanhas;
 using Campanhas.Domain.Entities.Campanhas.Enums;
+using Campanhas.Domain.Entities.ValueObjects;
 using Campanhas.Domain.Shared.Exceptions;
 using FluentAssertions;
 

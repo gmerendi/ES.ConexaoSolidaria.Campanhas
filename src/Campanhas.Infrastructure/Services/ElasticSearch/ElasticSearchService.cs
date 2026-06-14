@@ -33,7 +33,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
 
 
 
-        public async Task<IEnumerable<CampanhaDTO>> SearchAsync(string term)
+        public async Task<IEnumerable<CampanhaSemArrecadacaoDTO>> SearchAsync(string term)
         {
             _logger.LogInformation($"Inicio de busca no Elasticsearch.", BaseLogType.LOG, term);
 
@@ -77,10 +77,11 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
             if (!response.IsValidResponse)
             {
                 _logger.LogError($"Erro no Elasticsearch: {response.DebugInformation}", BaseLogType.LOG, response);
+                return Enumerable.Empty<CampanhaSemArrecadacaoDTO>();
             }
 
             _logger.LogInformation($"Busca no Elasticsearch retornada com sucesso", BaseLogType.LOG,response.Documents);
-            return response.Documents;
+            return response.Documents.Select(CampanhaSemArrecadacaoDTO.FromCampanhaDTO);
         }
 
 

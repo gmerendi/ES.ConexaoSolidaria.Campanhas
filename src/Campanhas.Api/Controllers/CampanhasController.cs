@@ -121,6 +121,7 @@ public sealed class CampanhasController : ControllerBase
     /// <remarks>  
     /// 
     /// Visualiza os dados de uma campanha no sistema pelo Guid.
+    /// Retorna campanhas com qualquer status
     /// 
     /// 
     /// **Esse endpoint requer autenticacao**
@@ -170,6 +171,7 @@ public sealed class CampanhasController : ControllerBase
     /// </summary>
     /// <remarks>   
     /// 
+    /// Painel de Transparência (Acesso Publico)
     /// Lista campanhas com status ATIVA no sistema.
     /// Esse endpoint possui paginacao. 
     /// Caso a pagina e tamanho nao sejam especificados, o padrão é pagina 1, tamanho 9999
