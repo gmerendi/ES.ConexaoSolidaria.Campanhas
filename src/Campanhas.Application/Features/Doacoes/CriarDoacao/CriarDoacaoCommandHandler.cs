@@ -17,10 +17,12 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
     private readonly ICacheService _cacheService;
     private readonly IMetricsService _metrics;
     private readonly IElasticSearchService _elasticSearchService;
+    private readonly ICryptoService _cryptoService;
 
     public CriarDoacaoCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
         IBaseLogger<AlterarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService)
+        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService,
+        ICryptoService cryptoService)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
@@ -29,6 +31,7 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
         _cacheService = cacheService;
         _metrics = metrics;
         _elasticSearchService = elasticSearchService;
+        _cryptoService = cryptoService;
     }
 
     public async Task<Result<CriarDoacaoResponse>> HandleAsync(CriarDoacaoCommand command, CancellationToken ct = default)
@@ -63,8 +66,9 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
             {
                 throw new DomainException("403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION");
             }
-
+            Console.WriteLine(solicitante.Cpf);
             // 4 - Enviar o evento de intenção de doacao que sera consumido pelo worker
+            
             await _messageService.SendDonationCreatedEventMessage(solicitante.Guid, solicitante.NomeCompleto,
                 solicitante.Email, campanhaExistente.Guid, campanhaExistente.Titulo, solicitante.Cpf, command.Valor, ct);
 
