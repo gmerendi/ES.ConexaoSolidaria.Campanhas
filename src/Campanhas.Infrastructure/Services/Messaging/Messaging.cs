@@ -40,7 +40,7 @@ namespace Campanhas.Infrastructure.Services.Messaging
 
             try
             {
-                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha,cpf, valor, _correlationIdGenerator.Get());
+                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, _correlationIdGenerator.Get());
                 await _publish.Publish(eventMessage, ct);
                 _logger.LogInformation("Evento DonationCreatedEvent publicado para o Broker. Email: " + email, BaseLogType.EVENT, eventMessage);
             }
