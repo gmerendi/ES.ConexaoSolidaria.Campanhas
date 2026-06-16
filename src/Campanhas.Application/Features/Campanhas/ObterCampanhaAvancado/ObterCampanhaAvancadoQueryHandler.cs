@@ -1,5 +1,4 @@
 using Campanhas.Application.Shared;
-using Campanhas.Domain.Entities.Campanhas;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
@@ -9,20 +8,15 @@ namespace Campanhas.Application.Features.Campanhas
 {
     public sealed class ObterCampanhaAvancadoQueryHandler : IUseCaseHandler<ObterCampanhaAvancadoQuery, Result<ObterCampanhaAvancadoResponse>>
     {
-        private readonly ICampanhaRepository _campanhaRepository;
         private readonly IUserContext _userContext;
         private readonly IBaseLogger<ObterCampanhaAvancadoQueryHandler> _logger;
-        private readonly ICacheService _cacheService;
         private readonly IElasticSearchService _elasticSearchService;
 
-        public ObterCampanhaAvancadoQueryHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
-            IBaseLogger<ObterCampanhaAvancadoQueryHandler> logger, ICacheService cacheService,
+        public ObterCampanhaAvancadoQueryHandler(IUserContext userContext,IBaseLogger<ObterCampanhaAvancadoQueryHandler> logger,
             IElasticSearchService elasticSearchService)
         {
-            _campanhaRepository = campanhaRepository;
             _userContext = userContext;
             _logger = logger;
-            _cacheService = cacheService;
             _elasticSearchService = elasticSearchService;
         }
 

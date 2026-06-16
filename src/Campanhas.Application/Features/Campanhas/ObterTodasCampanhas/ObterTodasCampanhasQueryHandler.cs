@@ -1,6 +1,5 @@
 using Campanhas.Application.Shared;
 using Campanhas.Domain.Entities.Campanhas;
-using Campanhas.Domain.Entities.Campanhas.Enums;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
@@ -12,16 +11,14 @@ namespace Campanhas.Application.Features.Campanhas
     public sealed class ObterTodasCampanhasQueryHandler : IUseCaseHandler<ObterTodasCampanhasQuery, Result<ObterTodasCampanhasResponse>>
     {
         private readonly ICampanhaRepository _campanhaRepository;
-        private readonly IUserContext _userContext;
         private readonly IBaseLogger<ObterTodasCampanhasQueryHandler> _logger;
         private readonly ICacheService _cacheService;
         private readonly IConfiguration _configuration;
 
-        public ObterTodasCampanhasQueryHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
+        public ObterTodasCampanhasQueryHandler(ICampanhaRepository campanhaRepository, 
             IBaseLogger<ObterTodasCampanhasQueryHandler> logger, ICacheService cacheService, IConfiguration configuration)
         {
             _campanhaRepository = campanhaRepository;
-            _userContext = userContext;
             _logger = logger;
             _cacheService = cacheService;
             _configuration = configuration;

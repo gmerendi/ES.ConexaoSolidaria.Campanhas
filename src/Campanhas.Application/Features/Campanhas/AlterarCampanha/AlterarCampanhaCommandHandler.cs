@@ -13,21 +13,17 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
     private readonly ICampanhaRepository _campanhaRepository;
     private readonly IUserContext _userContext;
     private readonly IBaseLogger<AlterarCampanhaCommandHandler> _logger;
-    private readonly IMessageService _messageService;
     private readonly ICacheService _cacheService;
-    private readonly IMetricsService _metrics;
     private readonly IElasticSearchService _elasticSearchService;
 
     public AlterarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
-        IBaseLogger<AlterarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService)
+        IBaseLogger<AlterarCampanhaCommandHandler> logger, ICacheService cacheService, 
+        IElasticSearchService elasticSearchService)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
         _logger = logger;
-        _messageService = messageService;
         _cacheService = cacheService;
-        _metrics = metrics;
         _elasticSearchService = elasticSearchService;
     }
 
