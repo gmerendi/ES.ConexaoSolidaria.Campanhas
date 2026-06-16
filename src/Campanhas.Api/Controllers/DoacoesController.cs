@@ -86,7 +86,7 @@ public sealed class DoacoesController : ControllerBase
 
 
 
-
+    
     /// <summary>
     /// UC-20 - Obter doacoes por campanha
     /// </summary>
@@ -116,7 +116,7 @@ public sealed class DoacoesController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> ObterDoacoesPorCampanha([FromBody] ObterDoacoesPorCampanhaRequest request, CancellationToken ct)
+    public async Task<IActionResult> ObterDoacoesPorCampanha([FromQuery] ObterDoacoesPorCampanhaRequest request, CancellationToken ct)
     {
         _logger.LogInformation("Obtendo doacoes para a campanha: " + request.GuidCampanha, BaseLogType.LOG, request);
         var command = new ObterDoacoesPorCampanhaQuery(request.GuidCampanha);
@@ -135,7 +135,7 @@ public sealed class DoacoesController : ControllerBase
 
 
 
-
+    
     /// <summary>
     /// UC-21 - Obter doacoes por usuario
     /// </summary>
@@ -165,7 +165,7 @@ public sealed class DoacoesController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> ObterDoacoesPorUsuario([FromBody] ObterDoacoesPorUsuarioRequest request, CancellationToken ct)
+    public async Task<IActionResult> ObterDoacoesPorUsuario([FromQuery] ObterDoacoesPorUsuarioRequest request, CancellationToken ct)
     {
         _logger.LogInformation("Obtendo doacoes para o usuario: " + request.GuidUsuario, BaseLogType.LOG, request);
         var command = new ObterDoacoesPorUsuarioQuery(request.GuidUsuario);
@@ -184,7 +184,7 @@ public sealed class DoacoesController : ControllerBase
 
 
 
-
+    
     /// <summary>
     /// UC-22 - Obter proprias doacoes
     /// </summary>
@@ -208,7 +208,7 @@ public sealed class DoacoesController : ControllerBase
     /// <response code="422">Entidade não processada</response>
     /// <response code="500">Erro interno do servidor</response>
     [Authorize(Roles = "GESTOR_ONG, DOADOR")]
-    [HttpPost]
+    [HttpGet("self")]
     [ProducesResponseType(typeof(ObterDoacoesPorUsuarioResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -241,5 +241,5 @@ public sealed class DoacoesController : ControllerBase
         return Ok(result.Value);
     }
 
-
+    
 }
