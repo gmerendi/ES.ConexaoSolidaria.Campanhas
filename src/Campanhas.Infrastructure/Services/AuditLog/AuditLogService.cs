@@ -29,7 +29,6 @@ namespace Campanhas.Infrastructure.Services.AuditLog
                     Operation = operation,
                     ChangedBy = user,
                     Payload = JsonSerializer.Serialize(data),
-                    // Define expiração para 1 ano (exemplo)
                     ExpirationTime = DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds()
                 };
                 _logger.LogInformation($"Salvando audit log para entidade " + entityType + " com Guid " + entityId + " - Operação: " + operation + " feito por: " + user, BaseLogType.LOG, entry);

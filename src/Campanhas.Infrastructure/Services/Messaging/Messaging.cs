@@ -51,23 +51,5 @@ namespace Campanhas.Infrastructure.Services.Messaging
             }
 
         }
-
-
-        public async Task SendCampaignCreatedEventMessage(Guid guidCampanha, string tituloCampanha, string descricaoCampanha, DateTime dataInicio, DateTime dataTermino, decimal metaFinanceira, CancellationToken ct)
-        {
-
-            try
-            {
-                var eventMessage = new CampaignCreatedEvent(guidCampanha, tituloCampanha, descricaoCampanha, dataInicio, dataTermino, metaFinanceira, _correlationIdGenerator.Get());
-                await _publish.Publish(eventMessage, ct);
-                _logger.LogInformation("Evento CampaignCreatedEvent publicado para o Broker. Nome: " + descricaoCampanha, BaseLogType.EVENT, eventMessage);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Erro ao publicar evento CampaignCreatedEvent para o Broker : " + descricaoCampanha, BaseLogType.EVENT, ex);
-                throw;
-            }
-
-        }
     }
 }

@@ -21,6 +21,8 @@ namespace Camapanhas.Application.Extensions
             services.AddScoped<IUseCaseHandler<CancelarCampanhaCommand, Result<bool>>, CancelarCampanhaCommandHandler>();
             services.AddScoped<IUseCaseHandler<ObterCampanhaAvancadoQuery, Result<ObterCampanhaAvancadoResponse>>, ObterCampanhaAvancadoQueryHandler>();
             services.AddScoped<IUseCaseHandler<CriarDoacaoCommand, Result<CriarDoacaoResponse>>, CriarDoacaoCommandHandler>();
+            services.AddScoped<IUseCaseHandler<ObterDoacoesPorCampanhaQuery, Result<ObterDoacoesPorCampanhaResponse>>, ObterDoacoesPorCampanhaQueryHandler>();
+            services.AddScoped<IUseCaseHandler<ObterDoacoesPorUsuarioQuery, Result<ObterDoacoesPorUsuarioResponse>>, ObterDoacoesPorUsuarioQueryHandler>();
 
             logger.LogInformation(" ***** UseCase services inicializados.");
 

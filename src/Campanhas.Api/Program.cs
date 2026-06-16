@@ -7,7 +7,7 @@ using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 var logCounter = 0;
-var logTotal = 7;
+var logTotal = 8;
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Configuration
@@ -23,47 +23,48 @@ using var loggerFactory = LoggerFactory.Create(logging => {
     logging.AddSimpleConsole();
 });
 var logger = loggerFactory.CreateLogger("Program");
-logger.LogInformation(" ***** ({0}/{1}) - Inicializando Campanhas API ", logCounter++, logTotal);
+logger.LogInformation(" ***** Inicializando Campanhas API ");
+logCounter++;
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Api
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Endpoints ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Endpoints ", logCounter, logTotal);
 builder.Services.AddControllers().ConfigurarMensagensDeValidacaoCustomizadas().ConfigurarErrosDeValidacaoCustomizados();
 builder.Services.AddEndpointsApiExplorer();
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Endpoints ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Endpoints ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Api Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Api Extensions ", logCounter, logTotal);
 builder.Services.AddSwaggerConfiguration(logger);
 builder.Services.AddHealthCheckConfiguration(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Api Extensions ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Application Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Application Extensions ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Application Extensions ", logCounter, logTotal);
 builder.Services.AddUseCaseServices(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Application Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Application Extensions ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Domain Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Domain Extensions ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Domain Extensions ", logCounter, logTotal);
 //builder.Services.AddDomainServices(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Domain Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Domain Extensions ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Infrastructure Extensions
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Infrastructure Extensions ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Infrastructure Extensions ", logCounter, logTotal);
 builder.Services.AddDbContext(builder.Configuration, logger);
 builder.Services.AddCustomLogging(logger);
 builder.Services.AddRepositories(logger);
@@ -73,7 +74,7 @@ builder.Services.AddAuthenticationServices(builder.Configuration, logger);
 builder.Services.AddCacheService(builder.Configuration, logger);
 builder.Services.AddMetricsServices(logger);
 builder.Services.AddElasticSearch(builder.Configuration, logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastructure Extensions ", logCounter++, logTotal);
 
 
 var app = builder.Build();
@@ -82,7 +83,7 @@ var app = builder.Build();
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Middlewares
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Middlewares ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Middlewares ", logCounter, logTotal);
 app.UseCorrelationMiddleware();
 app.UseExceptionMiddleware();
 app.UseTokenBlacklistMiddleware();
@@ -91,29 +92,24 @@ app.UseAuthorization();
 app.UseSwaggerMiddleware(logger);
 app.UseMetricsMiddleware();
 app.MapControllers();
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Middlewares ", logCounter, logTotal);
+app.MapCustomHealthChecks();
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Middlewares ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Observability
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Metrics ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Metrics ", logCounter, logTotal);
 app.UseMetricServer();
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Metrics ", logCounter, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Metrics ", logCounter++, logTotal);
 
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Migrations
 // ──────────────────────────────────────────────────────────────────────────────
-logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Migrations ", logCounter++, logTotal);
+logger.LogInformation(" ***** ({0}/{1}) - Inicio inicialização de Migrations ", logCounter, logTotal);
 app.ApplyMigrations(logger);
-logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Migrations ", logCounter, logTotal);
-
-
-// ──────────────────────────────────────────────────────────────────────────────
-// ── Health Check Mappings
-// ──────────────────────────────────────────────────────────────────────────────
-app.MapCustomHealthChecks();
+logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Migrations ", logCounter++, logTotal);
 
 
 

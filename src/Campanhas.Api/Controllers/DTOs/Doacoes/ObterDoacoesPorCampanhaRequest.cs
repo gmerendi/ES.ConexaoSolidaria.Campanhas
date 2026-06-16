@@ -2,8 +2,8 @@
 
 namespace Campanhas.Api.Controllers.DTOs
 {
-    public record RemoverCampanhaRequest(
+    public record ObterDoacoesPorCampanhaRequest(
         [Required(ErrorMessage = "400_GUID_REQUIRED")]
-        Guid Guid
+        Guid GuidCampanha
     );
 }

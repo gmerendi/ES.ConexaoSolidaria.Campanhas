@@ -14,24 +14,17 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
     private readonly IUserContext _userContext;
     private readonly IBaseLogger<AlterarCampanhaCommandHandler> _logger;
     private readonly IMessageService _messageService;
-    private readonly ICacheService _cacheService;
     private readonly IMetricsService _metrics;
-    private readonly IElasticSearchService _elasticSearchService;
-    private readonly ICryptoService _cryptoService;
 
     public CriarDoacaoCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
         IBaseLogger<AlterarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService,
-        ICryptoService cryptoService)
+        IMetricsService metrics)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
         _logger = logger;
         _messageService = messageService;
-        _cacheService = cacheService;
         _metrics = metrics;
-        _elasticSearchService = elasticSearchService;
-        _cryptoService = cryptoService;
     }
 
     public async Task<Result<CriarDoacaoResponse>> HandleAsync(CriarDoacaoCommand command, CancellationToken ct = default)

@@ -1,4 +1,3 @@
-using Campanhas.Domain.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace Campanhas.Application.Features.Campanhas;

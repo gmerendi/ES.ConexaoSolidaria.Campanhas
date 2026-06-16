@@ -15,19 +15,17 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
     private readonly IUserContext _userContext;
     private readonly IBaseLogger<CriarCampanhaCommandHandler> _logger;
     private readonly IMessageService _messageService;
-    private readonly ICacheService _cacheService;
     private readonly IMetricsService _metrics;
     private readonly IElasticSearchService _elasticSearchService;
 
     public CriarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
         IBaseLogger<CriarCampanhaCommandHandler> logger, IMessageService messageService,
-        ICacheService cacheService, IMetricsService metrics, IElasticSearchService elasticSearchService)
+        IMetricsService metrics, IElasticSearchService elasticSearchService)
     {
         _campanhaRepository = campanhaRepository;
         _userContext = userContext;
         _logger = logger;
         _messageService = messageService;
-        _cacheService = cacheService;
         _metrics = metrics;
         _elasticSearchService = elasticSearchService;
     }
@@ -78,10 +76,7 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
             // 6 - Insere no elasticsearch
             var campanhaDTO = CampanhaDTO.FromEntity(campanha);
             await _elasticSearchService.IndexAsync(campanhaDTO);
-
-            // 7 - Enviar mensagem de campanha criada
-            await _messageService.SendCampaignCreatedEventMessage(campanha.Guid, campanha.Titulo, campanha.Descricao,
-                campanha.DataInicio, campanha.DataFim, campanha.MetaFinanceira, ct);
+;
 
             // ── Métrica de negócio ─────────────────────────────────────────
             _metrics.IncrementarCampanhaCriada();
