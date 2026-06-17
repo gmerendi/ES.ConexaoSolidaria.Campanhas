@@ -29,7 +29,6 @@ public class CriarCampanhaCommandHandlerTests
         _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<IBaseLogger<CriarCampanhaCommandHandler>>();
         _messageServiceMock = new Mock<IMessageService>();
-        _cacheServiceMock = new Mock<ICacheService>();
         _metricsMock = new Mock<IMetricsService>();
         _elasticSearchMock = new Mock<IElasticSearchService>();
 
@@ -38,7 +37,6 @@ public class CriarCampanhaCommandHandlerTests
             _userContextMock.Object,
             _loggerMock.Object,
             _messageServiceMock.Object,
-            _cacheServiceMock.Object,
             _metricsMock.Object,
             _elasticSearchMock.Object);
     }
@@ -88,24 +86,10 @@ public class CriarCampanhaCommandHandlerTests
             .Setup(r => r.CadastrarAsync(It.IsAny<Campanha>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        _cacheServiceMock
-            .Setup(c => c.SetAsync(It.IsAny<string>(), It.IsAny<CampanhaDTO>(), It.IsAny<TimeSpan>()))
-            .Returns(Task.CompletedTask);
-
-        _cacheServiceMock
-            .Setup(c => c.RemoveByPrefixAsync(It.IsAny<string>()))
-            .Returns(Task.CompletedTask);
-
         _elasticSearchMock
             .Setup(e => e.IndexAsync(It.IsAny<CampanhaDTO>()))
             .Returns(Task.CompletedTask);
 
-        _messageServiceMock
-            .Setup(m => m.SendCampaignCreatedEventMessage(
-                It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>(),
-                It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
 
         // Act
         var result = await _handler.HandleAsync(command);
@@ -130,10 +114,7 @@ public class CriarCampanhaCommandHandlerTests
         _repositoryMock
             .Setup(r => r.CadastrarAsync(It.IsAny<Campanha>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
-        _cacheServiceMock.Setup(c => c.SetAsync(It.IsAny<string>(), It.IsAny<CampanhaDTO>(), It.IsAny<TimeSpan>())).Returns(Task.CompletedTask);
-        _cacheServiceMock.Setup(c => c.RemoveByPrefixAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
         _elasticSearchMock.Setup(e => e.IndexAsync(It.IsAny<CampanhaDTO>())).Returns(Task.CompletedTask);
-        _messageServiceMock.Setup(m => m.SendCampaignCreatedEventMessage(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         // Act
         await _handler.HandleAsync(command);
@@ -151,10 +132,7 @@ public class CriarCampanhaCommandHandlerTests
 
         _repositoryMock.Setup(r => r.ObterPorTituloAsync(command.Titulo, It.IsAny<CancellationToken>())).ReturnsAsync((Campanha?)null);
         _repositoryMock.Setup(r => r.CadastrarAsync(It.IsAny<Campanha>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        _cacheServiceMock.Setup(c => c.SetAsync(It.IsAny<string>(), It.IsAny<CampanhaDTO>(), It.IsAny<TimeSpan>())).Returns(Task.CompletedTask);
-        _cacheServiceMock.Setup(c => c.RemoveByPrefixAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
         _elasticSearchMock.Setup(e => e.IndexAsync(It.IsAny<CampanhaDTO>())).Returns(Task.CompletedTask);
-        _messageServiceMock.Setup(m => m.SendCampaignCreatedEventMessage(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         // Act
         await _handler.HandleAsync(command);
@@ -243,18 +221,14 @@ public class AlterarCampanhaCommandHandlerTests
         _repositoryMock = new Mock<ICampanhaRepository>();
         _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<IBaseLogger<AlterarCampanhaCommandHandler>>();
-        _messageServiceMock = new Mock<IMessageService>();
         _cacheServiceMock = new Mock<ICacheService>();
-        _metricsMock = new Mock<IMetricsService>();
         _elasticSearchMock = new Mock<IElasticSearchService>();
 
         _handler = new AlterarCampanhaCommandHandler(
             _repositoryMock.Object,
             _userContextMock.Object,
             _loggerMock.Object,
-            _messageServiceMock.Object,
             _cacheServiceMock.Object,
-            _metricsMock.Object,
             _elasticSearchMock.Object);
     }
 

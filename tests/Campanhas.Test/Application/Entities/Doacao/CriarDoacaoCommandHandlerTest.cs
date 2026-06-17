@@ -28,19 +28,15 @@ public class CriarDoacaoCommandHandlerTests
         _repositoryMock = new Mock<ICampanhaRepository>();
         _userContextMock = new Mock<IUserContext>();
         _loggerMock = new Mock<IBaseLogger<AlterarCampanhaCommandHandler>>();
-        _messageServiceMock = new Mock<IMessageService>();
-        _cacheServiceMock = new Mock<ICacheService>();
+        _messageServiceMock = new Mock<IMessageService>();;
         _metricsMock = new Mock<IMetricsService>();
-        _elasticSearchMock = new Mock<IElasticSearchService>();
 
         _handler = new CriarDoacaoCommandHandler(
             _repositoryMock.Object,
             _userContextMock.Object,
             _loggerMock.Object,
             _messageServiceMock.Object,
-            _cacheServiceMock.Object,
-            _metricsMock.Object,
-            _elasticSearchMock.Object);
+            _metricsMock.Object);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────

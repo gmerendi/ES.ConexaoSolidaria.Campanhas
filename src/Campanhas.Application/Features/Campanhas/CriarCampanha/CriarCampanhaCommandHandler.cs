@@ -5,7 +5,6 @@ using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Primitives;
-using Microsoft.Extensions.Configuration;
 
 namespace Campanhas.Application.Features.Campanhas;
 
