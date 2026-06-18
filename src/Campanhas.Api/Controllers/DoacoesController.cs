@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Campanhas.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [Produces("application/json")]
 public sealed class DoacoesController : ControllerBase
 {
@@ -46,8 +46,8 @@ public sealed class DoacoesController : ControllerBase
     /// 
     /// **Regras de Validação:**
     /// 
-    /// * **Guid:**
-    ///   - `O campo Titulo é obrigatório.`
+    /// * **GuidCampanha:**
+    ///   - `O campo GuidCampanha é obrigatório.`
     /// * **Valor:** 
     ///   - `O campo Valor é obrigatório.`
     ///   - `O valor deve ser maior que 0.`
@@ -104,7 +104,7 @@ public sealed class DoacoesController : ControllerBase
     /// 
     /// </remarks>
     /// <param name="request"></param>
-    /// <returns>List<DoacaoDTO></returns>
+    /// <returns>Lista - DoacaoDTO</returns>
     /// <response code="201">Doacoes</response>
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
@@ -147,13 +147,13 @@ public sealed class DoacoesController : ControllerBase
     /// 
     /// **Regras de Validação:**
     /// 
-    /// * **Guid:**
+    /// * **GuidCampanha:**
     ///   - `O campo GuidCampanha é obrigatório.`
     ///  
     /// 
     /// </remarks>
     /// <param name="request"></param>
-    /// <returns>List<DoacaoDTO></returns>
+    /// <returns>Lista - DoacaoDTO </returns>
     /// <response code="201">Doacoes</response>
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
@@ -194,15 +194,11 @@ public sealed class DoacoesController : ControllerBase
     /// 
     /// **Esse endpoint requer autenticacao**
     /// 
-    /// **Regras de Validação:**
-    /// 
-    /// * **Guid:**
-    ///   - `O campo GuidCampanha é obrigatório.`
     ///  
     /// 
     /// </remarks>
     /// <param name="request"></param>
-    /// <returns>List<DoacaoDTO></returns>
+    /// <returns>Lista DoacaoDTO</returns>
     /// <response code="201">Doacoes</response>
     /// <response code="400">Dados Inválidos</response>
     /// <response code="422">Entidade não processada</response>
