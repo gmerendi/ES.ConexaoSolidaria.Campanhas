@@ -52,7 +52,7 @@ namespace Campanhas.Application.Features.Campanhas
 
                     // 5 - Insere lista de campanhas no cache.  Pega sempre o ttl de ativas.
                     var ttlAtiva = _configuration.GetValue<int>("Cache:CampanhaAtivaTTLSeconds");
-                    await _cacheService.SetAsync(cacheKey, listaCampanhas, TimeSpan.FromMinutes(ttlAtiva));
+                    await _cacheService.SetAsync(cacheKey, listaCampanhas, TimeSpan.FromSeconds(ttlAtiva));
                 }
                 else
                 {

@@ -59,7 +59,7 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
             {
                 throw new DomainException("403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION");
             }
-            Console.WriteLine(solicitante.Cpf);
+            Console.WriteLine(solicitante.Guid);
             // 4 - Enviar o evento de intenção de doacao que sera consumido pelo worker
             
             await _messageService.SendDonationCreatedEventMessage(solicitante.Guid, solicitante.NomeCompleto,

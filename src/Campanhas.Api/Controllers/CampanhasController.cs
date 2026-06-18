@@ -17,7 +17,7 @@ public sealed class CampanhasController : ControllerBase
     private readonly IBaseLogger<CampanhasController> _logger;
     private readonly IUseCaseHandler<CriarCampanhaCommand, Result<CriarCampanhaResponse>> _criarCampanhaCommandHandler;
     private readonly IUseCaseHandler<AlterarCampanhaCommand, Result<AlterarCampanhaResponse>> _alterarCampanhaCommandHandler;
-    private readonly IUseCaseHandler<ObterDoacoesPorCampanhaQuery, Result<ObterCampanhaResponse>> _obterCampanhaQueryHandler;
+    private readonly IUseCaseHandler<ObterCampanhaQuery, Result<ObterCampanhaResponse>> _obterCampanhaQueryHandler;
     private readonly IUseCaseHandler<ObterTodasCampanhasQuery, Result<ObterTodasCampanhasResponse>> _obterTodasCampanhasQueryHandler;
     private readonly IUseCaseHandler<CancelarCampanhaCommand, Result<bool>> _cancelarCampanhaCommandHandler;
     private readonly IUseCaseHandler<ConcluirCampanhaCommand, Result<bool>> _concluirCampanhaCommandHandler;
@@ -26,7 +26,7 @@ public sealed class CampanhasController : ControllerBase
     public CampanhasController(IBaseLogger<CampanhasController> logger,
         IUseCaseHandler<CriarCampanhaCommand, Result<CriarCampanhaResponse>> criarCampanhaCommandHandler,
         IUseCaseHandler<AlterarCampanhaCommand, Result<AlterarCampanhaResponse>> alterarCampanhaCommandHandler,
-        IUseCaseHandler<ObterDoacoesPorCampanhaQuery, Result<ObterCampanhaResponse>> obterCampanhaQueryHandler,
+        IUseCaseHandler<ObterCampanhaQuery, Result<ObterCampanhaResponse>> obterCampanhaQueryHandler,
         IUseCaseHandler<ObterTodasCampanhasQuery, Result<ObterTodasCampanhasResponse>> obterTodasCampanhasQueryHandler,
         IUseCaseHandler<CancelarCampanhaCommand, Result<bool>> cancelarCampanhaCommandHandler,
         IUseCaseHandler<ConcluirCampanhaCommand, Result<bool>> concluirCampanhaCommandHandler,
@@ -148,7 +148,7 @@ public sealed class CampanhasController : ControllerBase
     {
         _logger.LogInformation("Iniciando busca de campanha: " + request.Guid, BaseLogType.LOG, request);
 
-        var query = new ObterDoacoesPorCampanhaQuery(request.Guid);
+        var query = new ObterCampanhaQuery(request.Guid);
 
         var result = await _obterCampanhaQueryHandler.HandleAsync(query, ct);
 
