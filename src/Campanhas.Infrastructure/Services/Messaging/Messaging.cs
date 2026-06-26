@@ -90,9 +90,9 @@ namespace Campanhas.Infrastructure.Services.Messaging
                 guidUser = guidUser.ToString(),
                 nome = nome,
                 email = email,
-                guidCampanha = guidCampanha,
-                titulo = tituloCampanha,
-                cpf = Cpf.Anonymize(cpf),
+                guidCampanha = guidCampanha.ToString(),
+                tituloCampanha = tituloCampanha,
+                cpf =cpf,
                 valor = valor,
                 correlationId = _correlationIdGenerator.Get()
             };
