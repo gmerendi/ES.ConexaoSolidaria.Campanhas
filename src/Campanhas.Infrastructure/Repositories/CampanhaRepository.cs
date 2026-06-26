@@ -1,4 +1,5 @@
 using Campanhas.Domain.Entities.Campanhas;
+using Campanhas.Domain.Entities.Campanhas.Enums;
 using Campanhas.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +28,11 @@ public sealed class CampanhaRepository : EFRepository<Campanha>, ICampanhaReposi
     public new async Task<List<Campanha>> ObterTodosAsync(int page = 1, int pageLength = 9999, CancellationToken cancellationToken = default)
     {
 
-        return await _dbSet.Skip((page - 1) * pageLength)   // pula os itens das páginas anteriores
-                     .Take(pageLength)                   // pega apenas o tamanho da página
-                     .ToListAsync(cancellationToken);
+        return await _dbSet
+            .Where(c => c.StatusCampanha == CampanhaStatus.ATIVA)
+            .Skip((page - 1) * pageLength)
+            .Take(pageLength)
+            .ToListAsync(cancellationToken);
     }
 
 
