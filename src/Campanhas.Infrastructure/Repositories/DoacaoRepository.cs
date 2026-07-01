@@ -1,4 +1,5 @@
 using Campanhas.Domain.Entities.Doacoes;
+using Campanhas.Domain.ValueObjects;
 using Campanhas.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -41,10 +42,10 @@ public sealed class DoacaoRepository : EFRepository<Doacao>, IDoacaoRepository
     }
 
 
-    public async Task<List<DoacaoShortDTO>> ObterPorUsuarioAsync(Guid guidUsuario, CancellationToken ct = default)
+    public async Task<List<DoacaoShortDTO>> ObterPorUsuarioAsync(Email email,  CancellationToken ct = default)
     {
         return await _dbSet
-         .Where(u => u.GuidUsuario == guidUsuario)
+         .Where(u => u.EmailUsuario.Endereco.ToLower() == email.Endereco.ToLower())
          .Select(u => new DoacaoShortDTO(
              u.GuidCampanha,
              u.TituloCampanha.Valor,

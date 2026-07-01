@@ -6,6 +6,7 @@ using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Exceptions;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Primitives;
+using Campanhas.Domain.ValueObjects;
 using Microsoft.Extensions.Configuration;
 
 namespace Campanhas.Application.Features.Campanhas
@@ -33,13 +34,14 @@ namespace Campanhas.Application.Features.Campanhas
         {        
             try
             {
-                _logger.LogInformation("Tentativa de busca de todas as doacoes para a campanha " + command.Guid, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de todas as doacoes do usuario " + command.Email, BaseLogType.LOG, command);
 
-                // 1 - Usuario nao existe nesse serico.  Procura direto por guid
+                // 1 - Usuario nao existe nesse servico.  Procura direto por email
                 
 
                 // Busca doacoes para o referido usuario
-                var listaDoacoes = await _doacaoRepository.ObterPorUsuarioAsync(command.Guid, ct);
+                var emailUsuario = Email.Create(command.Email);
+                var listaDoacoes = await _doacaoRepository.ObterPorUsuarioAsync(emailUsuario, ct);
 
 
                 return Result<ObterDoacoesPorUsuarioResponse>.Success(new ObterDoacoesPorUsuarioResponse(listaDoacoes));
