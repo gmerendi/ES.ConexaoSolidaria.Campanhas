@@ -135,7 +135,7 @@ public sealed class DoacoesController : ControllerBase
 
 
 
-    
+
     /// <summary>
     /// UC-21 - Obter doacoes por usuario
     /// </summary>
@@ -147,8 +147,9 @@ public sealed class DoacoesController : ControllerBase
     /// 
     /// **Regras de Validação:**
     /// 
-    /// * **GuidCampanha:**
-    ///   - `O campo GuidCampanha é obrigatório.`
+    /// * **Email:**
+    ///   - `O campo Email é obrigatório.`
+    ///   - `O campo Email é invalido.`
     ///  
     /// 
     /// </remarks>
@@ -167,8 +168,8 @@ public sealed class DoacoesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> ObterDoacoesPorUsuario([FromQuery] ObterDoacoesPorUsuarioRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Obtendo doacoes para o usuario: " + request.GuidUsuario, BaseLogType.LOG, request);
-        var command = new ObterDoacoesPorUsuarioQuery(request.GuidUsuario);
+        _logger.LogInformation("Obtendo doacoes para o usuario: " + request.Email, BaseLogType.LOG, request);
+        var command = new ObterDoacoesPorUsuarioQuery(request.Email);
 
         var result = await _obterDoacoesPorUsuarioQueryHandler.HandleAsync(command, ct);
 
@@ -220,10 +221,10 @@ public sealed class DoacoesController : ControllerBase
         var emailLogado = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                          ?? User.FindFirst("email")?.Value;
 
-        var request = new ObterDoacoesPorUsuarioRequest(guidLogado);
+        var request = new ObterDoacoesPorUsuarioRequest(emailLogado);
         _logger.LogInformation("Obtendo doacoes para o usuario: " + emailLogado, BaseLogType.LOG, request);
 
-        var command = new ObterDoacoesPorUsuarioQuery(request.GuidUsuario);
+        var command = new ObterDoacoesPorUsuarioQuery(request.Email);
 
         var result = await _obterDoacoesPorUsuarioQueryHandler.HandleAsync(command, ct);
 

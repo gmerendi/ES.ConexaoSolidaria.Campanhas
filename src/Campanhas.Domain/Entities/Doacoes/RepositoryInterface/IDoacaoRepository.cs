@@ -1,4 +1,5 @@
 using Campanhas.Domain.Shared.Interfaces;
+using Campanhas.Domain.ValueObjects;
 
 namespace Campanhas.Domain.Entities.Doacoes
 {
@@ -6,6 +7,6 @@ namespace Campanhas.Domain.Entities.Doacoes
     {
         Task<Doacao?> ObterPorCorrelationIdAsync(string correlationId, CancellationToken ct = default);
         Task<List<DoacaoDTO>> ObterPorCampanhaAsync(Guid guidCampanha, CancellationToken ct = default);
-        Task<List<DoacaoShortDTO>> ObterPorUsuarioAsync(Guid guidUsuario, CancellationToken ct = default);
+        Task<List<DoacaoShortDTO>> ObterPorUsuarioAsync(Email email, CancellationToken ct = default);
     }
 }
