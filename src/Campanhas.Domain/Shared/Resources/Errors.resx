@@ -300,4 +300,7 @@
   <data name="403_CAMPAIGN_DOES_NOT_ACCEPT_DONATION" xml:space="preserve">
     <value>Essa campanha nao esta mais aceitando doacoes</value>
   </data>
+  <data name="422_ENDDATE_IN_THE_PAST" xml:space="preserve">
+    <value>A data de fim não pode ser no passado.</value>
+  </data>
 </root>

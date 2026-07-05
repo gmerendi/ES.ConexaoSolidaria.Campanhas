@@ -520,6 +520,15 @@ namespace Campanhas.Domain.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A data de fim não pode ser no passado..
+        /// </summary>
+        public static string _422_ENDDATE_IN_THE_PAST {
+            get {
+                return ResourceManager.GetString("422_ENDDATE_IN_THE_PAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A password deve conter: letra maiúscula, minúscula, número e caracter especial..
         /// </summary>
         public static string _422_PASSWORD_COMPLEXITY {

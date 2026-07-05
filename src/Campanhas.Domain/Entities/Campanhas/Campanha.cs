@@ -126,12 +126,18 @@ public sealed class Campanha : EntityBase
     private static void DataAssertions(DateTime inicio, DateTime fim)
     {
         AssertionConcern.AssertArgumentNotNull(inicio, "400_STARTDATE_REQUIRED");
-        AssertionConcern.AssertArgumentNotNull(inicio, "400_ENDDATE_REQUIRED");
+        AssertionConcern.AssertArgumentNotNull(fim, "400_ENDDATE_REQUIRED");
 
         if (fim <= inicio)
         {
             throw new DomainException("422_DATES_MISMATCHING");
         }
+
+        if (fim < DateTime.Now)
+        {
+            throw new DomainException("422_ENDDATE_IN_THE_PAST");
+        }
+
     }
 
     private static void SolicitanteAssertions(string solicitanteEmail)
