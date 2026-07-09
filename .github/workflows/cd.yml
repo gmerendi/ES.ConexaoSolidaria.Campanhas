@@ -32,6 +32,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: gmerendi/ES.ConexaoSolidaria.Infra
+          token: ${{ secrets.INFRA_REPO_TOKEN }}
           ref: develop
           path: infra
 
