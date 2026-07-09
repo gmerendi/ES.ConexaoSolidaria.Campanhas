@@ -5,9 +5,10 @@ on:
     branches: [develop, main]
   pull_request:
     branches: [develop, main]
+  workflow_call:
 
 env:
-  DOTNET_VERSION: '9.0.x'   # SDK precisa ser 9+ para reconhecer o formato .slnx (o projeto em si roda em net8.0, sem conflito)
+  DOTNET_VERSION: '9.0.x'
   SOLUTION_PATH: 'ES.ConexaoSolidaria.Campanhas.slnx'
 
 jobs:
