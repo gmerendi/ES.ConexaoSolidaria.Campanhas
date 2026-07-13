@@ -17,7 +17,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
     private readonly IElasticSearchService _elasticSearchService;
 
     public AlterarCampanhaCommandHandler(ICampanhaRepository campanhaRepository, IUserContext userContext,
-        IBaseLogger<AlterarCampanhaCommandHandler> logger, ICacheService cacheService, 
+        IBaseLogger<AlterarCampanhaCommandHandler> logger, ICacheService cacheService,
         IElasticSearchService elasticSearchService)
     {
         _campanhaRepository = campanhaRepository;
@@ -37,7 +37,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
 
         try
         {
-            _logger.LogInformation("Tentativa de alteracao de campanha iniciada com o titulo: " + command.Titulo, BaseLogType.LOG, command);
+            _logger.LogInformation("Tentativa de alteracao de campanha iniciada com o titulo: {Titulo}", BaseLogType.LOG, new { command.Titulo });
 
             // 2 - Buscar solicitante
             var solicitante = _userContext.GetUser() ?? null;
@@ -74,7 +74,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
                 solicitante.Email
                 );
             await _campanhaRepository.AlterarAsync(campanhaExistente);
-           
+
             // 5 - Remove campanha do cache
             var cacheKey = $"campanha:{campanhaExistente.Guid}";
             await _cacheService.RemoveAsync(cacheKey);
@@ -104,7 +104,7 @@ public sealed class AlterarCampanhaCommandHandler : IUseCaseHandler<AlterarCampa
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao alterar campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+            _logger.LogError("Erro ao alterar campanha: {ExceptionMsg}", BaseLogType.LOG, ex);
             return Result<AlterarCampanhaResponse>.Failure(ex.Message);
         }
     }

@@ -30,7 +30,7 @@ namespace Campanhas.Application.Features.Campanhas
 
             try
             {
-                _logger.LogInformation("Tentativa de busca de campanha avançada iniciada para o termo: " + command.Termo, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de campanha avançada iniciada para o termo: ", BaseLogType.LOG, new { Termo = command.Termo });
 
                 //2 - Buscar solicitante. 
                 var solicitante = _userContext.GetUser() ?? null;
@@ -52,7 +52,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao obter campanha: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao obter a campanha. " + ex.Message);
             }
         }

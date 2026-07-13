@@ -15,7 +15,7 @@ namespace Campanhas.Application.Features.Campanhas
         private readonly ICacheService _cacheService;
         private readonly IConfiguration _configuration;
 
-        public ObterTodasCampanhasQueryHandler(ICampanhaRepository campanhaRepository, 
+        public ObterTodasCampanhasQueryHandler(ICampanhaRepository campanhaRepository,
             IBaseLogger<ObterTodasCampanhasQueryHandler> logger, ICacheService cacheService, IConfiguration configuration)
         {
             _campanhaRepository = campanhaRepository;
@@ -25,10 +25,10 @@ namespace Campanhas.Application.Features.Campanhas
         }
 
         public async Task<Result<ObterTodasCampanhasResponse>> HandleAsync(ObterTodasCampanhasQuery command, CancellationToken ct)
-        {        
+        {
             try
             {
-                _logger.LogInformation("Tentativa de busca de todas as campanhas ", BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de todas as campanhas.", BaseLogType.LOG, new { Pagina = command.Pagina, TamanhoPagina = command.TamanhoPagina });
 
                 // 1 - Tentar obter campanha do cache
                 var cacheKey = $"campanhas:ativas:pagina:{command.Pagina}:tamanho:{command.TamanhoPagina}";
@@ -38,7 +38,7 @@ namespace Campanhas.Application.Features.Campanhas
                 // 2 - Buscar campanhas - não encontrado no cache
                 if (listaCampanhas == null)
                 {
-                    _logger.LogInformation("Campanhas ativas nao encontradas no cache, buscando no banco. ", BaseLogType.LOG, command);
+                    _logger.LogInformation("Campanhas ativas nao encontradas no cache, buscando no banco.", BaseLogType.LOG, new { Pagina = command.Pagina, TamanhoPagina = command.TamanhoPagina });
 
                     var campanhaDbList = await _campanhaRepository.ObterTodosAsync(command.Pagina, command.TamanhoPagina, ct);
 
@@ -56,7 +56,7 @@ namespace Campanhas.Application.Features.Campanhas
                 }
                 else
                 {
-                    _logger.LogInformation("Campanhas ativas encontradas no cache. ", BaseLogType.LOG, listaCampanhas);
+                    _logger.LogInformation("Campanhas ativas encontradas no cache.", BaseLogType.LOG, new { Total = listaCampanhas.Count });
                 }
 
 
@@ -68,7 +68,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter as campanhas: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao obter as campanhas: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao obter as campanhas. " + ex.Message);
             }
         }

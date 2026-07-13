@@ -18,7 +18,7 @@ namespace Campanhas.Application.Features.Campanhas
         private readonly ICacheService _cacheService;
         private readonly IConfiguration _configuration;
 
-        public ObterDoacoesPorCampanhaQueryHandler(ICampanhaRepository campanhaRepository, 
+        public ObterDoacoesPorCampanhaQueryHandler(ICampanhaRepository campanhaRepository,
             IBaseLogger<ObterDoacoesPorCampanhaQueryHandler> logger, ICacheService cacheService, IConfiguration configuration,
             IDoacaoRepository doacaoRepository)
         {
@@ -30,10 +30,10 @@ namespace Campanhas.Application.Features.Campanhas
         }
 
         public async Task<Result<ObterDoacoesPorCampanhaResponse>> HandleAsync(ObterDoacoesPorCampanhaQuery command, CancellationToken ct)
-        {        
+        {
             try
             {
-                _logger.LogInformation("Tentativa de busca de todas as doacoes para a campanha " + command.Guid, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de todas as doacoes para a campanha {Guid}", BaseLogType.LOG, new { command.Guid });
 
                 // 1 - Tentar obter campanha do cache
                 var cacheKey = $"campanha:{command.Guid}";
@@ -42,7 +42,7 @@ namespace Campanhas.Application.Features.Campanhas
                 // 2 - Buscar campanha - não encontrado no cache
                 if (campanha == null)
                 {
-                    _logger.LogInformation("Campanha não encontrada no cache, buscando no banco: " + command.Guid, BaseLogType.LOG, command);
+                    _logger.LogInformation("Campanha não encontrada no cache, buscando no banco: {Guid}", BaseLogType.LOG, new { command.Guid });
 
                     var campanhaDb = await _campanhaRepository.ObterPorGuidAsync(command.Guid, ct);
                     if (campanhaDb == null)
@@ -58,7 +58,7 @@ namespace Campanhas.Application.Features.Campanhas
                 }
                 else
                 {
-                    _logger.LogInformation("Campanha encontrado no cache: " + command.Guid, BaseLogType.LOG, command);
+                    _logger.LogInformation("Campanha encontrado no cache: {Guid}", BaseLogType.LOG, new { command.Guid });
                 }
 
                 // Busca doacoes para a referida campanha
@@ -73,7 +73,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter as doacoes: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao obter as doacoes: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao obter as doacoes. " + ex.Message);
             }
         }
