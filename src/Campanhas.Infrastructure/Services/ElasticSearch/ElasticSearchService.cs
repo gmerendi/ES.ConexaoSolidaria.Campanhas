@@ -35,7 +35,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
 
         public async Task<IEnumerable<CampanhaSemArrecadacaoDTO>> SearchAsync(string term)
         {
-            _logger.LogInformation($"Inicio de busca no Elasticsearch.", BaseLogType.LOG, term);
+            _logger.LogInformation("Inicio de busca no Elasticsearch. Termo: {Term}", BaseLogType.LOG, new { term });
 
 
             var response = await _client.SearchAsync<CampanhaDTO>(s => s
@@ -53,7 +53,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
                                     new Field("dataFim")
                                 })
                                 .Query(term)
-                                .Fuzziness(new Fuzziness("AUTO")) 
+                                .Fuzziness(new Fuzziness("AUTO"))
                                 .Type(TextQueryType.BestFields)
                             ),
                             // Prefix query para buscas parciais 
@@ -66,8 +66,8 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
                                     new Field("dataFim")
                                 })
                                 .Query(term)
-                                .Fuzziness(new Fuzziness("AUTO")) 
-                                .Type(TextQueryType.BoolPrefix)  
+                                .Fuzziness(new Fuzziness("AUTO"))
+                                .Type(TextQueryType.BoolPrefix)
                             )
                         )
                     )
@@ -76,11 +76,11 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
 
             if (!response.IsValidResponse)
             {
-                _logger.LogError($"Erro no Elasticsearch: {response.DebugInformation}", BaseLogType.LOG, response);
+                _logger.LogError("Erro no Elasticsearch: {DebugInformation}", BaseLogType.LOG, new { response.DebugInformation });
                 return Enumerable.Empty<CampanhaSemArrecadacaoDTO>();
             }
 
-            _logger.LogInformation($"Busca no Elasticsearch retornada com sucesso", BaseLogType.LOG,response.Documents);
+            _logger.LogInformation("Busca no Elasticsearch retornada com sucesso. Total: {Total}", BaseLogType.LOG, new { Total = response.Documents.Count });
             return response.Documents.Select(CampanhaSemArrecadacaoDTO.FromCampanhaDTO);
         }
 
@@ -108,21 +108,21 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
 
                 if (deleteResponse.IsValidResponse)
                 {
-                    _logger.LogInformation("Índice " + index + " limpo. " + deleteResponse.Deleted + " documentos removidos.", BaseLogType.LOG,  null);
+                    _logger.LogInformation("Índice {Index} limpo. {Deleted} documentos removidos.", BaseLogType.LOG, new { index, deleteResponse.Deleted });
                 }
-                    
+
                 else
                 {
-                    _logger.LogError("Erro ao limpar índice: " + index, BaseLogType.LOG,  deleteResponse.DebugInformation);
+                    _logger.LogError("Erro ao limpar índice: {Index}", BaseLogType.LOG, new { index, deleteResponse.DebugInformation });
                 }
 
                 return deleteResponse.IsSuccess();
-                    
-                
+
+
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao limpar índice antes da reindexação: ", BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao limpar índice antes da reindexação.", BaseLogType.LOG, ex);
                 return false;
             }
         }

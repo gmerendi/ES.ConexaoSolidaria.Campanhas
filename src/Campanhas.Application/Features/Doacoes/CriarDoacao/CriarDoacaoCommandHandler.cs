@@ -37,7 +37,7 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
 
         try
         {
-            _logger.LogInformation("Tentativa de doacao iniciada para campanha com o Guid: " + command.Guid, BaseLogType.LOG, command);
+            _logger.LogInformation("Tentativa de doacao iniciada para campanha com o Guid: {Guid}", BaseLogType.LOG, new { command.Guid });
 
             // 2 - Buscar solicitante
             var solicitante = _userContext.GetUser() ?? null;
@@ -61,7 +61,7 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
             }
             Console.WriteLine(solicitante.Guid);
             // 4 - Enviar o evento de intenção de doacao que sera consumido pelo worker
-            
+
             await _messageService.SendDonationCreatedEventMessage(solicitante.Guid, solicitante.NomeCompleto,
                 solicitante.Email, campanhaExistente.Guid, campanhaExistente.Titulo, solicitante.Cpf, command.Valor, ct);
 
@@ -85,7 +85,7 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao realizar doação: " + ex.Message, BaseLogType.LOG, ex.Message);
+            _logger.LogError("Erro ao realizar doação: {ExceptionMsg}", BaseLogType.LOG, ex);
             return Result<CriarDoacaoResponse>.Failure(ex.Message);
         }
     }

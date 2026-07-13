@@ -39,7 +39,9 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
 
         try
         {
-            _logger.LogInformation("Tentativa de criacao de campanha iniciada com o titulo: " + command.Titulo, BaseLogType.LOG, command);
+            _logger.LogInformation("Iniciando criação de campanha: {Titulo}", BaseLogType.LOG, 
+                new { Titulo = command.Titulo, Meta = command.MetaFinanceira, DataInicio = command.DataInicio, DataFim = command.DataFim });
+
             // 2 - Verificar se campanha já existe
             var campanhaExistente = await _campanhaRepository.ObterPorTituloAsync(command.Titulo, ct);
 
@@ -101,7 +103,7 @@ public sealed class CriarCampanhaCommandHandler : IUseCaseHandler<CriarCampanhaC
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao cadastrar campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+            _logger.LogError("Erro ao criar campanha: {ExceptionMsg}", BaseLogType.LOG, ex);
             return Result<CriarCampanhaResponse>.Failure(ex.Message);
         }
     }

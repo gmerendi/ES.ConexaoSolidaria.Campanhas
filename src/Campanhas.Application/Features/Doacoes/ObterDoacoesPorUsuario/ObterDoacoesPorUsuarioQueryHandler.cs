@@ -19,7 +19,7 @@ namespace Campanhas.Application.Features.Campanhas
         private readonly ICacheService _cacheService;
         private readonly IConfiguration _configuration;
 
-        public ObterDoacoesPorUsuarioQueryHandler(ICampanhaRepository campanhaRepository, 
+        public ObterDoacoesPorUsuarioQueryHandler(ICampanhaRepository campanhaRepository,
             IBaseLogger<ObterDoacoesPorUsuarioQueryHandler> logger, ICacheService cacheService, IConfiguration configuration,
             IDoacaoRepository doacaoRepository)
         {
@@ -31,13 +31,13 @@ namespace Campanhas.Application.Features.Campanhas
         }
 
         public async Task<Result<ObterDoacoesPorUsuarioResponse>> HandleAsync(ObterDoacoesPorUsuarioQuery command, CancellationToken ct)
-        {        
+        {
             try
             {
-                _logger.LogInformation("Tentativa de busca de todas as doacoes do usuario " + command.Email, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de todas as doacoes do usuario {Email}", BaseLogType.LOG, new { command.Email });
 
                 // 1 - Usuario nao existe nesse servico.  Procura direto por email
-                
+
 
                 // Busca doacoes para o referido usuario
                 var emailUsuario = Email.Create(command.Email);
@@ -52,7 +52,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter as doacoes: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao obter as doacoes: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao obter as doacoes. " + ex.Message);
             }
         }

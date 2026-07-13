@@ -4,6 +4,7 @@ using Campanhas.Application.Shared;
 using Campanhas.Domain.Enums;
 using Campanhas.Domain.Shared.Interfaces;
 using Campanhas.Domain.Shared.Primitives;
+using Elastic.Clients.Elasticsearch.Core.TermVectors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -91,7 +92,7 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CriarCampanha([FromBody] CriarCampanhaRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando criação de campanha: " + request.Titulo, BaseLogType.LOG, request);
+        _logger.LogInformation("Iniciando criação de campanha: {Titulo}", BaseLogType.LOG, new { Titulo = request.Titulo, Meta = request.MetaFinanceira });
         var command = new CriarCampanhaCommand(
             request.Titulo,
             request.Descricao,
@@ -104,11 +105,11 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanha criada com sucesso: " + result.Value.Titulo, BaseLogType.LOG, result.Value);
+        _logger.LogInformation("Campanha criada com sucesso: {Titulo}", BaseLogType.LOG, new { Titulo = result.Value.Titulo, Guid = result.Value.Guid });
         return Created("Campanha criada com sucesso", result);
     }
 
@@ -146,7 +147,7 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ObterCampanha([FromQuery] ObterCampanhaRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando busca de campanha: " + request.Guid, BaseLogType.LOG, request);
+        _logger.LogInformation("Iniciando busca de campanha: {Guid}", BaseLogType.LOG, new { Guid = request.Guid });
 
         var query = new ObterCampanhaQuery(request.Guid);
 
@@ -154,11 +155,11 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanha obtida com sucesso: " + result.Value?.Guid, BaseLogType.LOG, result);
+        _logger.LogInformation("Campanha obtida com sucesso: {Guid} | Titulo: {Titulo}", BaseLogType.LOG, new { Guid = request.Guid, Titulo = result.Value.Titulo });
         return Ok(result.Value);
     }
 
@@ -193,18 +194,18 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ObterTodasCampanhas([FromQuery] ObterTodasCampanhasRequest request,CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando obtencao de campanhas ativas.", BaseLogType.LOG, null);
+        _logger.LogInformation("Iniciando busca de todas as campanhas.", BaseLogType.LOG, new { Pagina = request.Pagina, TamanhoPagina = request.TamanhoPagina });
 
         var query = new ObterTodasCampanhasQuery(request.Pagina, request.TamanhoPagina);
         var result = await _obterTodasCampanhasQueryHandler.HandleAsync(query ,ct);
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanhas ativas obtidas sucesso.", BaseLogType.LOG, result);
+        _logger.LogInformation("Campanhas obtidas com sucesso.", BaseLogType.LOG, new { Total = result.Value.Campanhas?.Count() ?? 0, Pagina = request.Pagina, TamanhoPagina = request.TamanhoPagina });
         return Ok(result.Value);
     }
 
@@ -239,18 +240,18 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CancelarCampanha([FromQuery] CancelarCampanhaRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando cancelamento de campanha ativa.", BaseLogType.LOG, null);
+        _logger.LogInformation("Iniciando cancelamento de campanha: {Guid}", BaseLogType.LOG, new { Guid = request.Guid });
 
         var command = new CancelarCampanhaCommand(request.Guid);
         var result = await _cancelarCampanhaCommandHandler.HandleAsync(command, ct);
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanha cancelada com sucesso.", BaseLogType.LOG, result);
+        _logger.LogInformation("Campanha cancelada com sucesso: {Guid}", BaseLogType.LOG, new { Guid = request.Guid });
         return Ok("Campanha cancelada com sucesso: " + request.Guid);
     }
 
@@ -284,18 +285,18 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ConcluirCampanha([FromQuery] ConcluirCampanhaRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando conclusao de campanha ativa.", BaseLogType.LOG, null);
+        _logger.LogInformation("Iniciando conclusão de campanha: {Guid}", BaseLogType.LOG, new { Guid = request.Guid });
 
         var command = new ConcluirCampanhaCommand(request.Guid);
         var result = await _concluirCampanhaCommandHandler.HandleAsync(command, ct);
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
-        _logger.LogInformation("Campanha concluida com sucesso.", BaseLogType.LOG, result);
+        _logger.LogInformation("Campanha concluída com sucesso: {Guid}", BaseLogType.LOG, new { Guid = request.Guid });
         return Ok("Campanha concluida com sucesso: " + request.Guid);
     }
 
@@ -348,7 +349,7 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> AlterarCampanha([FromBody] AlterarCampanhaRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando alteracao de campanha: " + request.Titulo, BaseLogType.LOG, request);
+        _logger.LogInformation("Iniciando alteração de campanha: {Guid}", BaseLogType.LOG, new { Guid = request.Guid, Titulo = request.Titulo });
         var command = new AlterarCampanhaCommand(
             request.Guid,
             request.Titulo,
@@ -362,7 +363,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -405,14 +406,15 @@ public sealed class CampanhasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> ObterCampanhaAvancado([FromQuery] ObterCampanhaAvancadoRequest request, CancellationToken ct)
     {
-        _logger.LogInformation("Iniciando busca avancada de campanhas: " + request.Termo, BaseLogType.LOG, request);
+        _logger.LogInformation("Iniciando busca de campanhas por termo: {Termo}", BaseLogType.LOG, new { Termo = request.Termo });
+
         var command = new ObterCampanhaAvancadoQuery(request.Termo);
 
         var result = await _obterCampanhaAvancadoQueryHandler.HandleAsync(command, ct);
 
         if (!result.IsSuccess)
         {
-            _logger.LogError(result.Error, BaseLogType.LOG, result);
+            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 

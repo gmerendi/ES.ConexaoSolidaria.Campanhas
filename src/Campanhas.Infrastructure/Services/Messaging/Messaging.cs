@@ -70,11 +70,11 @@ namespace Campanhas.Infrastructure.Services.Messaging
             {
                 var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, _correlationIdGenerator.Get());
                 await _publish.Publish(eventMessage, ct);
-                _logger.LogInformation("Evento DonationCreatedEvent publicado para o Broker. Email: " + email, BaseLogType.EVENT, eventMessage);
+                _logger.LogInformation("Evento DonationCreatedEvent publicado para o Broker. Email: {Email}", BaseLogType.EVENT, eventMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao publicar evento DonationCreatedEvent para o Broker : " + email, BaseLogType.EVENT, ex);
+                _logger.LogError("Erro ao publicar evento DonationCreatedEvent para o Broker. Email: {Email}", BaseLogType.EVENT, ex, new { email });
                 throw;
             }
 
@@ -92,7 +92,7 @@ namespace Campanhas.Infrastructure.Services.Messaging
                 email = email,
                 guidCampanha = guidCampanha.ToString(),
                 tituloCampanha = tituloCampanha,
-                cpf =cpf,
+                cpf = cpf,
                 valor = valor,
                 correlationId = _correlationIdGenerator.Get()
             };
@@ -105,11 +105,11 @@ namespace Campanhas.Infrastructure.Services.Messaging
                     QueueUrl = _donationCreatedQueueUrl,
                     MessageBody = messageBody
                 });
-                _logger.LogInformation("Evento DonationCreatedEvent publicado para o SQS. Email: " + email, BaseLogType.EVENT, message);
+                _logger.LogInformation("Evento DonationCreatedEvent publicado para o SQS. Email: {Email}", BaseLogType.EVENT, message);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao publicar evento DonationCreatedEvent para o SQS : " + email, BaseLogType.EVENT, ex);
+                _logger.LogError("Erro ao publicar evento DonationCreatedEvent para o SQS. Email: {Email}", BaseLogType.EVENT, ex, new { email });
                 throw;
             }
 

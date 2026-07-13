@@ -39,7 +39,7 @@ namespace Campanhas.Application.Features.Campanhas
 
             try
             {
-                _logger.LogInformation("Tentativa de conclusão de campanha: " + command.Guid, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de conclusão de campanha: {Guid}", BaseLogType.LOG, new { command.Guid });
 
                 //2 - Buscar solicitante.             
                 var solicitante = _userContext.GetUser() ?? null;
@@ -95,7 +95,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao concluir campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao concluir campanha: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao concluir campanha. " + ex.Message);
             }
         }

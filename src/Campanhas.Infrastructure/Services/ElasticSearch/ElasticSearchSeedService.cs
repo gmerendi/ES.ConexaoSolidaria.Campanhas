@@ -54,7 +54,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
 
                 var totalNoBanco = campanhas.Count;
 
-                _logger.LogInformation("Banco de dados: " + totalNoBanco + " campanhas | Elasticsearch: " + totalNoElastic + " documentos.", BaseLogType.LOG, null);
+                _logger.LogInformation("Banco de dados: {TotalNoBanco} campanhas | Elasticsearch: {TotalNoElastic} documentos.", BaseLogType.LOG, new { totalNoBanco, totalNoElastic });
 
                 if (totalNoElastic >= totalNoBanco)
                 {
@@ -62,7 +62,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
                     return;
                 }
 
-                _logger.LogInformation("Inconsistência detectada. Iniciando reindexação de jogos.", BaseLogType.LOG, totalNoBanco);
+                _logger.LogInformation("Inconsistência detectada. Iniciando reindexação de jogos. Total no banco: {TotalNoBanco}", BaseLogType.LOG, new { totalNoBanco });
 
                 // Só limpa se o índice existir
                 if (indexExists)
@@ -85,15 +85,15 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
                     catch (Exception ex)
                     {
                         erros++;
-                        _logger.LogError("Erro ao indexar campanha: " + campanha.Titulo, BaseLogType.LOG, ex.Message);
+                        _logger.LogError("Erro ao indexar campanha: {Titulo}", BaseLogType.LOG, ex, new { campanha.Titulo });
                     }
                 }
 
-                _logger.LogInformation("Sincronização DB e ElasticSearch concluída. Indexados: " + indexados + " | Erros: " + erros, BaseLogType.LOG, null);
+                _logger.LogInformation("Sincronização DB e ElasticSearch concluída. Indexados: {Indexados} | Erros: {Erros}", BaseLogType.LOG, new { indexados, erros });
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro crítico na sincronização do Elasticsearch.", BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro crítico na sincronização do Elasticsearch.", BaseLogType.LOG, ex);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Campanhas.Infrastructure.Services.ElasticSearch
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao limpar índice antes da reindexação: ", BaseLogType.LOG,  ex.Message);
+                _logger.LogError("Erro ao limpar índice antes da reindexação.", BaseLogType.LOG, ex);
             }
         }
     }

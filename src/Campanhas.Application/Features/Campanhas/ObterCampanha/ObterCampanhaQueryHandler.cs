@@ -37,7 +37,7 @@ namespace Campanhas.Application.Features.Campanhas
 
             try
             {
-                _logger.LogInformation("Tentativa de busca de campanha iniciada para o guid: " + command.Guid, BaseLogType.LOG, command);
+                _logger.LogInformation("Tentativa de busca de campanha iniciada para o guid: {Guid}", BaseLogType.LOG, new { Guid = command.Guid });
 
                 //2 - Buscar solicitante. 
                 var solicitante = _userContext.GetUser() ?? null;
@@ -56,7 +56,7 @@ namespace Campanhas.Application.Features.Campanhas
                 // 4 - Buscar campanha - não encontrado no cache
                 if (campanha == null)
                 {
-                    _logger.LogInformation("Campanha não encontrada no cache, buscando no banco: " + command.Guid, BaseLogType.LOG, command);
+                    _logger.LogInformation("Campanha nao encontrada no cache, buscando no banco: {Guid}", BaseLogType.LOG, new { Guid = command.Guid });
 
                     var campanhaDb = await _campanhaRepository.ObterPorGuidAsync(command.Guid, ct);
                     if (campanhaDb == null)
@@ -72,7 +72,7 @@ namespace Campanhas.Application.Features.Campanhas
                 }
                 else
                 {
-                    _logger.LogInformation("Campanha encontrado no cache: " + command.Guid, BaseLogType.LOG, command);
+                    _logger.LogInformation("Campanha encontrada no cache: {Guid}", BaseLogType.LOG, new { Guid = command.Guid });
                 }
 
                 var response = new ObterCampanhaResponse
@@ -94,7 +94,7 @@ namespace Campanhas.Application.Features.Campanhas
             }
             catch (Exception ex)
             {
-                _logger.LogError("Erro ao obter campanha: " + ex.Message, BaseLogType.LOG, ex.Message);
+                _logger.LogError("Erro ao obter campanha: {ExceptionMsg}", BaseLogType.LOG, ex);
                 throw new ApplicationException("Ocorreu um erro ao obter a campanha. " + ex.Message);
             }
         }
