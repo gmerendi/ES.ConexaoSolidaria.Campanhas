@@ -58,7 +58,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}-${{ github.run_number }}
         run: |
-          cd usuarios
+          cd campanhas
           # 1. Faz o build apenas com a tag ÚNICA (Segurança de Imutabilidade)
           docker build -f $DOCKERFILE_PATH -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           
