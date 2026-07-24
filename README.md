@@ -120,7 +120,7 @@ Serviços expostos:
 | Redis | localhost:6379 |
 | DynamoDB Local | localhost:8000 |
 | Elasticsearch | http://localhost:9200 |
-| RabbitMQ (AMQP / Management UI) | localhost:5672 / http://localhost:15672 (`fiap` / `fiap123`) |
+| RabbitMQ (AMQP / Management UI) | http://localhost:15672 (`fiap` / `fiap123`) |
 
 As migrations do banco são aplicadas automaticamente na subida da aplicação.
 
