@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Campanhas.Domain.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Campanhas.Domain.Entities.Doacoes;
 
@@ -12,12 +13,13 @@ public sealed class DoacaoDTO
     public string TituloCampanha { get; init; } = String.Empty;
     public decimal ValorDoacao { get; init; } 
     public string DataDoacao { get; init; } = String.Empty;
+    public string StatusDoacao { get; init; }
 
     private DoacaoDTO() { }
 
     [SetsRequiredMembers]
     public DoacaoDTO(Guid guidUsuario, string nomeUsuario, string emailUsuario, string cpfUsuario,
-        Guid guidCampanha, string tituloCampanha, decimal valorDoacao, string dataDoacao)
+        Guid guidCampanha, string tituloCampanha, decimal valorDoacao, string dataDoacao, string statusDoacao)
     {
         GuidUsuario = guidUsuario;
         NomeUsuario = nomeUsuario;
@@ -27,5 +29,6 @@ public sealed class DoacaoDTO
         TituloCampanha = tituloCampanha;
         ValorDoacao = valorDoacao;
         DataDoacao = dataDoacao;
+        StatusDoacao = statusDoacao;
     }
 }

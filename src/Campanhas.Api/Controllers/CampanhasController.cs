@@ -155,7 +155,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao buscar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -201,7 +201,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao buscar todas as campanhas: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -247,7 +247,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao cancelar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -292,7 +292,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao concluir campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -363,7 +363,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao alterar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -414,7 +414,7 @@ public sealed class CampanhasController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao buscar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 

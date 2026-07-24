@@ -36,7 +36,8 @@ public sealed class DoacaoRepository : EFRepository<Doacao>, IDoacaoRepository
              u.GuidCampanha,
              u.TituloCampanha.Valor,   
              u.ValorDoacao,
-             u.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss") 
+             u.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss"),
+             u.StatusDoacao.ToString()
          ))
          .ToListAsync(ct);
     }
@@ -50,7 +51,8 @@ public sealed class DoacaoRepository : EFRepository<Doacao>, IDoacaoRepository
              u.GuidCampanha,
              u.TituloCampanha.Valor,
              u.ValorDoacao,
-             u.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss")
+             u.DataCriacao.ToString("dd/MM/yyyy HH:mm:ss"),
+             u.StatusDoacao.ToString()
          ))
          .ToListAsync(ct);
     }

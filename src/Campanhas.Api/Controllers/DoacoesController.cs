@@ -41,6 +41,7 @@ public sealed class DoacoesController : ControllerBase
     /// <remarks>   
     /// 
     /// Cria uma nova intencao de doacao a ser processada pelo worker.
+    /// Para testes: Doacoes com valor par serao aprovadas, doacoes com valor impar serao recusadas.
     /// 
     /// **Esse endpoint requer autenticacao**
     /// 
@@ -77,7 +78,7 @@ public sealed class DoacoesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao criar doação: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -126,7 +127,7 @@ public sealed class DoacoesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao obter doações por campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -177,7 +178,7 @@ public sealed class DoacoesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao obter doações: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
@@ -232,7 +233,7 @@ public sealed class DoacoesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            _logger.LogError("Erro ao criar campanha: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
+            _logger.LogError("Erro ao obter doacoes: {ErrorCode}", BaseLogType.LOG, new { ErrorCode = result.Error });
             return BadRequest(result.Error);
         }
 
