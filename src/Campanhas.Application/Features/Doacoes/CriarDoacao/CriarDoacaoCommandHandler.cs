@@ -63,7 +63,8 @@ public sealed class CriarDoacaoCommandHandler : IUseCaseHandler<CriarDoacaoComma
             // 4 - Enviar o evento de intenção de doacao que sera consumido pelo worker
 
             await _messageService.SendDonationCreatedEventMessage(solicitante.Guid, solicitante.NomeCompleto,
-                solicitante.Email, campanhaExistente.Guid, campanhaExistente.Titulo, solicitante.Cpf, command.Valor, ct);
+                solicitante.Email, campanhaExistente.Guid, campanhaExistente.Titulo, solicitante.Cpf, command.Valor, DoacaoStatus.PROCESSANDO.ToString(),
+                ct);
 
             // ── Métrica de negócio ─────────────────────────────────────────
             _metrics.IncrementarIntencaoDoacao();

@@ -40,17 +40,20 @@ namespace Campanhas.Infrastructure.Services.Messaging
 
 
 
-        public async Task SendDonationCreatedEventMessage(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor,CancellationToken ct)
+        public async Task SendDonationCreatedEventMessage(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor, string status, CancellationToken ct)
         {
+            //Simulacao de status baseado no valor da doacao, apenas para fins de teste.
+            // Par - Aprovado | Ímpar - Recusado
+            status = await CheckStatus(valor);
 
 
             if (_applicationType == "LOCAL")
             {
-                await SendDonationCreatedEventMessageRabbit(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, ct);
+                await SendDonationCreatedEventMessageRabbit(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, status, ct);
             }
             else if (_applicationType == "LAB")
             {
-                await SendDonationCreatedEventMessageSQS(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, ct);
+                await SendDonationCreatedEventMessageSQS(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, status, ct);
             }
 
         }
@@ -62,13 +65,27 @@ namespace Campanhas.Infrastructure.Services.Messaging
         // -----------------------------------------------------------------------------
         // Privados
         // -----------------------------------------------------------------------------
+        private async Task<string> CheckStatus(decimal valor)
+        {
+            // Converte a parte inteira do decimal para long/int para aplicar a verificação de par/ímpar
+            long valorInteiro = (long)Math.Truncate(valor);
+
+            // Regra: Par (incluindo 0) = 1 (Aprovado) | Ímpar = 2 (Recusado)
+            // Math.Abs garante que não quebre mesmo se por algum motivo vier valor negativo
+            string status = (Math.Abs(valorInteiro) % 2 == 0) ? DoacaoStatus.APROVADA.ToString() : DoacaoStatus.RECUSADA.ToString();
+            return status;
+        }
+
+
+
+
         //Rabbit
-        private async Task SendDonationCreatedEventMessageRabbit(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor, CancellationToken ct)
+        private async Task SendDonationCreatedEventMessageRabbit(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor, string status, CancellationToken ct)
         {
 
             try
             {
-                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, _correlationIdGenerator.Get());
+                var eventMessage = new DonationCreatedEvent(guidUser, nome, email, guidCampanha, tituloCampanha, cpf, valor, status, _correlationIdGenerator.Get());
                 await _publish.Publish(eventMessage, ct);
                 _logger.LogInformation("Evento DonationCreatedEvent publicado para o Broker. Email: {Email}", BaseLogType.EVENT, eventMessage);
             }
@@ -83,7 +100,7 @@ namespace Campanhas.Infrastructure.Services.Messaging
 
 
         //SQS
-        private async Task SendDonationCreatedEventMessageSQS(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor, CancellationToken ct)
+        private async Task SendDonationCreatedEventMessageSQS(Guid guidUser, string nome, string email, Guid guidCampanha, string tituloCampanha, string cpf, decimal valor, string status, CancellationToken ct)
         {
             var message = new
             {
@@ -94,6 +111,7 @@ namespace Campanhas.Infrastructure.Services.Messaging
                 tituloCampanha = tituloCampanha,
                 cpf = cpf,
                 valor = valor,
+                status = status,
                 correlationId = _correlationIdGenerator.Get()
             };
 
